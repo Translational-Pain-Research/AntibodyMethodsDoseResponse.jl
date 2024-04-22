@@ -51,7 +51,7 @@ end
 
 @doc raw"""
 	accumulation_model(grid::OneDimGrid; offset = nothing)
-Create a mulit-epitope accumulation model. Returns `(model,λ,centers,volumes)` where 
+Create a multi-epitope accumulation model. Returns `(model,λ,centers,volumes)` where 
 
 * `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
@@ -100,7 +100,7 @@ end
 
 @doc raw"""
 	accumulation_inv_const_model(grid::OneDimGrid; offset = nothing)
-Create a muli-epitope accumulation model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
+Create a multi-epitope accumulation model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
 
 * `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
@@ -162,7 +162,7 @@ end
 
 @doc raw"""
 	langmuir_model(grid::OneDimGrid; offset = nothing)
-Create a muli-epitope Langmuir model. Returns `(model,λ,centers,volumes)` where 
+Create a multi-epitope Langmuir model. Returns `(model,λ,centers,volumes)` where 
 
 * `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
@@ -215,7 +215,7 @@ end
 
 @doc raw"""
 	langmuir_inv_const_model(grid::OneDimGrid; offset = nothing)
-Create a muli-epitope Langmuir model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
+Create a multi-epitope Langmuir model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
 
 * `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.

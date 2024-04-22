@@ -11,6 +11,7 @@ export area_scaled_variation, log_area_scaled_variation
 """
 	area_scaled_variation(center, volume, weight, neighbor_centers, neighbor_volumes, neighbor_weights)
 Block variation function for [`refine!`](@ref). Variation value based on the difference of the weights, scaled with the area (volume) of the corresponding block.
+
 	mean(@. abs(weight * volume - neighbor_weights * neighbor_volumes))
 """
 function area_scaled_variation(center, volume, weight, neighbor_centers, neighbor_volumes, neighbor_weights)
@@ -20,13 +21,14 @@ end
 """
 	log_area_scaled_variation(center, volume, weight, neighbor_centers, neighbor_volumes, neighbor_weights)
 Block variation function for [`refine!`](@ref). Variation value based on the difference of the weight, scaled with the visible area (in a logarithmic plot) of the corresponding block.
-	log_volume = (log(center + volume / 2) - log(center - volume / 2))
-	neighbor_log_volumes = @. (log(neighbor_centers + neighbor_volumes / 2) - log(neighbor_centers - neighbor_log_volumes / 2))
+
+	log_volume = (log10(center + volume / 2) - log10(center - volume / 2))
+	neighbor_log_volumes = @. (log10(neighbor_centers + neighbor_volumes / 2) - log10(neighbor_centers - neighbor_log_volumes / 2))
 	mean(@. abs(weight * log_volume  - neighbor_weights * neighbor_log_volumes)) 
 """
 function log_area_scaled_variation(center, volume, weight, neighbor_centers, neighbor_volumes, neighbor_weights)
-	log_volume = (log(center + volume / 2) - log(center - volume / 2))
-	neighbor_log_volumes = @. (log(neighbor_centers + neighbor_volumes / 2) - log(neighbor_centers - neighbor_volumes / 2))
+	log_volume = (log10(center + volume / 2) - log10(center - volume / 2))
+	neighbor_log_volumes = @. (log10(neighbor_centers + neighbor_volumes / 2) - log10(neighbor_centers - neighbor_volumes / 2))
 	mean(@. abs(weight * log_volume  - neighbor_weights * neighbor_log_volumes)) 
 end
 
@@ -85,7 +87,7 @@ The following keywords (with default values) are available:
 * `prior_generator::Function = default_prior_generator`: The function that generates the prior. The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> prior(λ)`. The `default_prior_generator` generates a uniform prior `λ-> 0` for the log-posterior objective.
 * `distribution_derivatives = nothing`: Array of partial derivatives of the logarithmic distributions for the log-posterior objective. See [`log_posterior_gradient`](@ref).
 * `prior_gradient_generator = default_prior_gradient_generator`: The function that generates the prior-gradient (see  [`log_posterior_gradient`](@ref)). The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> ∇prior(λ)`. The `default_prior_gradient_generator` returns `nothing` which internally corresponds to the uniform prior for the log-posterior objective.
-* `block_variation::Function = log_area_scaled_variation` and `selection::Function = maximum` are the refinement options of [`refine!`](@ref).
+* `block_variation::Function =` [`log_area_scaled_variation`](@ref) and `selection::Function = maximum` are the refinement options of [`refine!`](@ref).
 """
 mutable struct AdaptiveOptions
 	name::AbstractString

@@ -85,6 +85,15 @@ results, data, replicates = load_results("path_to_stored_results")
 
 This allows to re-plot the results at a later time, without the need to re-run the analysis.
 
+!!! warning
+	The `results`, `data` and `replicates` are saved with `Serialization.jl`. Loading objects into a new instance of Julia does not re-instantiate referenced functions. In other words, the distribution functions of loaded `FittingData` objects do not work. Hence, loaded `FittingData` objects cannot be used for fitting. Instead, one should define new `FittingData` functions from scratch, e.g. by
+
+		new_data = FittingData(data.independent, data.dependent, data.errors, distributions = ....)
+
+	The default distributions created by the `FittingCondition` constructor are
+
+		(y,m,Δy)-> -(y-m)^2/Δy^2
+
 ## Plotting the results
 
 To visualize the results, different plotting functions are provided. The most straightforward one is [`bin_analysis_plot`](@ref), which returns 2 plots, the dose-response plot and the density plot:

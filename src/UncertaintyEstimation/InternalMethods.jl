@@ -179,11 +179,11 @@ end
 
 
 # shift_samples([a_1,...,a_n],S,1) creates a vector of samples [[max(a_1 + s,0),...,a_n] for s in S], etc..
-function shift_samples(parameters, shifts, index)
+function shift_samples(parameters, shifts, index, scales)
 	samples = Matrix{promote_type(eltype(parameters),Float64, eltype(shifts[1]))}(undef, length(shifts)+1, length(parameters))
 	for i in 1:size(samples,1)-1
 		samples[i,:] = parameters
-		samples[i,index] = max.(samples[i,index] .+ shifts[i],0)
+		samples[i,index] = max.(samples[i,index] .+ shifts[i] .* scales[index] ./ maximum(scales[index]),0)
 	end
 	samples[end,:] = parameters
 	return samples
@@ -201,12 +201,13 @@ end
 	# Recalculate `thresholds` from best density value.
 
 	# Return `samples`, `density_values`, `thresholds`
-function shift_data(objective::Function, parameters, bin, sorted_levels, log_density::Bool, steps::Integer, bisections::Integer)
+function shift_data(objective::Function, parameters, bin, sorted_levels, log_density::Bool, steps::Integer, bisections::Integer, scales)
 	thresholds = get_thresholds(sorted_levels, objective(parameters), log_density)
 
 	f = index_shift_generator(objective,parameters,bin)
 	max_increase = find_largest_increase(f,1,thresholds[1],bisections)
-	samples = shift_samples(parameters,vcat(LinRange(0,max_increase,steps)...,LinRange(0,-maximum(parameters[bin]),steps)...),bin)
+	# No need to check that rescaled shift do not become negative, as shift_samples already filters negative values.
+	samples = shift_samples(parameters,vcat(LinRange(0,max_increase,steps)...,LinRange(0,-maximum(parameters[bin]),steps)...),bin, scales)
 	objective_values = [objective(samples[i,:]) for i in 1:size(samples,1)]
 	thresholds = get_thresholds(sorted_levels,maximum(objective_values),log_density)
 

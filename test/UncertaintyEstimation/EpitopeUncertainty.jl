@@ -60,9 +60,8 @@
 			return setindex!(B,x,ind)
 		end
 
-
 		# Test all combinations of bin dimensions, objective functions and offset configurations.
-		for bins in [collect(1:length(grid)),[[1,2],[3,5]]], objective_type in [:lsq, :posterior, :log_posterior], offset in [nothing,1]
+		for bins in [collect(1:length(grid)),[[1,2],[3,5]]], objective_type in [:lsq, :posterior, :log_posterior], offset in [nothing,1], normalization in [:none,:linear,:log]
 
 			# Use tested methods (Data.jl and Models.jl) to create data.
 			dr_result = DoseResponseResult(grid,LogRange(1e-10,1e-2,10), offset = isnothing(offset) ? 0 : offset)
@@ -75,7 +74,7 @@
 
 			# Create EpitopeUncertainty.
 			levels = [0.1,0.9,1.0,0.2,0.4,0.3,0.5,0.6,0.8,0.7,0.1,0.1] # Unordered with duplicates to test processing of levels.
-			e = EpitopeUncertainty(data,grid, bins, levels = levels, options = options, steps = 10^2, bisections = 10)
+			e = EpitopeUncertainty(data,grid, bins, levels = levels, options = options, steps = 10^2, bisections = 10, volume_normalization = normalization)
 
 			# Test that the levels are processed correctly.
 			@test e.levels == sort(unique(levels))

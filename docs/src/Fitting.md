@@ -274,3 +274,27 @@ fit_conditions(conditions)
 
 !!! info "Multi-threading"
 	The number of threads cannot be changed after Julia is launched. The number of threads needs to be set in before, e.g. with `julia -t 8` to run Julia with 8 threads. The number of threads can be checked with `Threads.nthreads()`.
+
+## Changing the initial values
+
+
+In each case discussed here, no initial parameter values were set for the model fitting. This is, because the wights of the gird are used as initial values. By default, [`create_grid`](@ref) sets all weights to `1`:
+
+```@example FittingConvenience
+grid = create_grid(LogRange(1e-10,1e-2,3)) 
+export_weights(grid)
+```
+
+Changing the weights of the gird before running the fitting-process allows to specify the initial values for the model fitting. E.g. for the manual definition of adaptive fitting:
+
+```julia
+import_weights!(grid,[eps(),1])
+adaptive_result = adaptive_dose_response_fit(grid,data,minimizer, options = fitting_options)
+```
+
+Or for the convenience workflow, e.g. after the `FittingCondition` has already been defined:
+
+```julia
+import_weights!(condition.grid,[eps(),1])
+result = fit_condition(condition)
+```

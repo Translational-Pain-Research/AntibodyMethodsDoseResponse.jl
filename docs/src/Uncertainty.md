@@ -16,12 +16,18 @@ density_plot = plot(DensityPlot(adaptive_result.grid), xaxis = :log, color = 2, 
 plot(dr_plot, density_plot, layout = (1,2), size = (800,300), margins = 4mm, legend = :topleft) # hide
 ```
 
-A question of interest could be the uncertainty of the individual peaks. For this, the bins (intervals) belonging to the different peaks need to be identified. Using [`peak_detection`](@ref) and setting the threshold to `0.01` results in:
+A question of interest could be the uncertainty of the individual peaks. For this, the index-bins belonging to the different peaks need to be identified. Using [`peak_detection`](@ref) and setting the threshold to `0.01` results in:
 
 ```@example Uncertainty
 bins, ranges = peak_detection(adaptive_result.grid, 0.01)
 ```
-[`peak_detection`](@ref) returns the identified peaks both as bins (interval indices as needed for [`EpitopeUncertainty`](@ref)) and the ranges (as needed for [`peak_analysis_plot`](@ref) and `DensityAnnotation`). By default, the regions between peaks are also included (`fill = true`) and the peaks are determined with `volume_normalization = :log` (see [Background: log-volume normalization](@ref log_volume_normalization)).
+[`peak_detection`](@ref) returns the identified peaks both as bins (indices of intervals) and the grid-domain ranges. By default, the regions between peaks are also included (`fill = true`) and the peaks are determined with `volume_normalization = :log` (see [Background: log-volume normalization](@ref log_volume_normalization)).
+
+!!! info
+	For plotting purposes ([`bin_analysis_plot`](@ref), [`peak_analysis_plot`](@ref)), the bins need to specify the grid-domain ranges, e.g. `[[1e-10,1e-8],[1e-5,1e-3]]`. For the uncertainty estimation and uncertainty plotting ([`uncertainty_plot`](@ref)), the bins need to specify the grid intervals that are varied, e.g. `[[1,2,3],[5,8]]`.
+
+!!! tip
+	Defining grid-domain ranges is often easier than figuring out which gird intervals belong to these ranges. The [`select_indices`](@ref) function allows to pick the interval indices belonging to a gird-domain range.
 
 Having defined the interval groups, the uncertainty can be estimated by fixing all parameters to the fit result, shifting uniformly only the parameters belonging to the current group of interest. This process is then repeated for all interval groups. Evaluating the objective function for each shift allows to estimate the uncertainty of the interval group.
 
@@ -72,7 +78,7 @@ The `colormap` function from `Colors.jl` creates an array of colors (here `8` co
 * `volume_normalization = :log`: The volume-normalization as discussed in [Background: log-volume normalization](@ref log_volume_normalization).
 * `colors = [:gray]`: An array of colors (that `Plots.jl` accepts for the `color` keyword) that correspond to the different uncertainty levels. If the array contains less colors than uncertainty levels, the last color is repeated for the remaining levels.
 * `opacities = [1]`: Array of opacities (number between `0` and `1`) that correspond to the different uncertainty levels. Again, the last opacity is repeated if there are more uncertainty levels than opacities.
-* `reverse = false`: If `true` the plotting order of the uncertainty levels is reversed. Since the ranges are plotted on top of each other, this can become necessary when the [`EpitopeUncertainty`](@ref) constructor for samples is used, where larger levels correspond to larger uncertainty (as opposed to the bin-wise shifting constructor). 
+* `reverse = false`: If `true` the plotting order of the uncertainty levels is reversed. Since the uncertainty ranges are plotted on top of each other, this can become necessary when the [`EpitopeUncertainty`](@ref) constructor for samples is used, where larger levels correspond to larger uncertainty (as opposed to the bin-wise shifting constructor). 
 * `hide_labels = true`: If `true` the labels are omitted. Can become necessary when a large number of uncertainty levels is used.
 * `bins = nothing`: Specifies the positions for the bin-markers (dashed lines). The bins should be the same as those used in the [`EpitopeUncertainty`](@ref) constructor. If `nothing`, bin markers are omitted.
 * `bin_color = :gray`: Color of the bin markers.
@@ -191,18 +197,42 @@ scatter!(data, color = "Dark Orange", label = "data") # plot data points on top
 
 
 
+## Rescale the bin-wise shifts
+
+By default (`volume_normalization = :none`), all weights within the same bin are shifted uniformly. However, the corresponding intervals may have different lengths. And the contribution of an interval is given by the product `weight × interval length`. Hence, scaling the wight shifts according to their corresponding interval length provides a further uncertainty estimation from bin-wise weight shifting. For this, the `volume_normalization = :linear` keyword can be used in the [`EpitopeUncertainty`](@ref) constructor, leading to
+
+```@example Uncertainty
+eu = deserialize("examples/uncertainty_volume/eu.jld") # hide
+du = deserialize("examples/uncertainty_volume/du.jld") # hide
+
+du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = eu_options(8, bins, hide_labels = false), du_arguments = du_options(8, hide_labels = false)) # hide
+
+du_plot = plot(du_plot) # hide
+scatter!(data, color = "Dark Orange", label = "data") # hide
+
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+```
+Observe that the shifts become larger for larger `K_\tau` values. Although the intervals appear to have the same lengths, the intervals further right in the plot are larger, because of the logarithmic plot. Hence, the shifts, when scaled by the interval length, become larger. Note that this behavior is universal, i.e. not necessarily depending on the uncertainty itself but on the fact of the unequal size of intervals of a logarithmic scale.
 
 
+As mentioned in [Background: log-volume normalization](@ref log_volume_normalization), it is in fact the visual area of the intervals in the logarithmic plot that corresponds to the dose-response effect of the interval. Thus, scaling the shifts with the visual lengths of the intervals, as they appear in a logarithmic plot, is another approach to investigate the uncertainty with bin-wise weight shifting. This can be achieved by `volume_normalization = :log`:
+
+```@example Uncertainty
+eu = deserialize("examples/uncertainty_log_volume/eu.jld") # hide
+du = deserialize("examples/uncertainty_log_volume/du.jld") # hide
+
+du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = eu_options(8, bins, hide_labels = false), du_arguments = du_options(8, hide_labels = false)) # hide
+
+du_plot = plot(du_plot) # hide
+scatter!(data, color = "Dark Orange", label = "data") # hide
+
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+```
+Since the intervals have the about the same length in the logarithmic plot, the shifts are almost identical (for the respective bin).
 
 
-
-
-
-
-
-
-
-
+!!! info
+	In summary, the different re-scalings of the shifts provide additional methods to investigate the uncertainty differently. Since bin-wise shifts only approximate the uncertainty roughly (as sampling is computationally expensive), different scalings reveal different aspects of the uncertainty, by testing different configuration of deviation from the best fit. Hence, no scaling is superior to the others, they just answer slightly different questions about the uncertainty.
 
 
 

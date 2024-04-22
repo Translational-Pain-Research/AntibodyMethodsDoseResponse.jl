@@ -11,7 +11,7 @@ export EpitopeUncertainty
 
 # EpitopeUncertainty from bin-wise shifting.
 # Documentation in struct docstring.
-function EpitopeUncertainty(data::FittingData,grid::AdaptiveDensityApproximation.OneDimGrid, bins = collect(1:length(grid)); levels = collect(0.1:0.1:1), options::AdaptiveOptions = AdaptiveOptions(), steps::Integer = 10^4, bisections::Integer = 10^2)
+function EpitopeUncertainty(data::FittingData,grid::AdaptiveDensityApproximation.OneDimGrid, bins = collect(1:length(grid)); levels = collect(0.1:0.1:1), options::AdaptiveOptions = AdaptiveOptions(), steps::Integer = 10^4, bisections::Integer = 10^2, volume_normalization = :none)
 
 	level_check(levels, non_zero = true)
 	sorted_levels = sort_levels(levels)
@@ -25,8 +25,19 @@ function EpitopeUncertainty(data::FittingData,grid::AdaptiveDensityApproximation
 	# Skip empty bins (avoid infinite while loop in find_largest_increase).
 	nonempty_bins = [bin for bin in bins if !isempty(bin)]
 
+	centers, volumes, weights = export_all(grid)
+
+	if volume_normalization == :linear
+		scales = volumes
+	elseif volume_normalization == :log
+		scales = log10.(centers .+ volumes/2) .- log10.(centers .- volumes/2)
+	else
+		scales = ones(length(volumes))
+	end
+
 	for (completed_bins,bin) in enumerate(nonempty_bins)
-		samples, objective_values, thresholds = shift_data(objective,parameters, bin,sorted_levels,!(options.objective == :posterior),steps,bisections)
+		# log_density argument: Both :lsq and :log_posterior use logarithmic densities, thus, !(options.objective == :posterior) as Bool value.
+		samples, objective_values, thresholds = shift_data(objective,parameters, bin,sorted_levels,!(options.objective == :posterior),steps,bisections, scales)
 		fill_boundaries!(lower,upper,thresholds,samples,objective_values,bin)
 		print("Uncertainty estimation | completed $completed_bins of $(length(bins))\r")
 	end

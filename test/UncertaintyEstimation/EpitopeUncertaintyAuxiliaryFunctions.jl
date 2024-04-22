@@ -100,26 +100,28 @@
 
 		original_array = ones(10)
 		shifts = collect(-5:10)
+		scales = collect(1:10)
 		
 		# 1-index bin.
-		samples = shift_samples(original_array,shifts,1)
+		samples = shift_samples(original_array,shifts,2, scales)
 
 		# Original array should not be mutated.
 		@test original_array == ones(10)
 		
 		for i in eachindex(shifts)
 			# i-th sample should use the i-th shift.
-			@test samples[i,:] == vcat(max(1+shifts[i],0), ones(9)...)
+			# Single index scales should always be rescaled to 1.
+			@test samples[i,:] == vcat(1,max(1+shifts[i] * 1,0), ones(8)...)
 		end
 		# shift_samples should always include the original array (trivial shift).
 		@test samples[end,:] == original_array
-
 		# 2-index bin.
 		shifts = [[i,i+2] for i in -5:10]
-		samples = shift_samples(original_array,shifts,[1,3])
+		samples = shift_samples(original_array,shifts,[1,3], scales)
 		for i in eachindex(shifts)
 			# i-th sample should use the i-th shift.
-			@test samples[i,:] == vcat(max(1+shifts[i][1],0), 1, max(1+shifts[i][2],0) , ones(7)...)
+			# scales should be rescaled to [1,3] / 3.
+			@test samples[i,:] == vcat(max(1+shifts[i][1]/3,0), 1, max(1+shifts[i][2],0) , ones(7)...)
 		end
 		# shift_samples should always include the original array (trivial shift).
 		@test samples[end,:] == original_array
@@ -153,11 +155,13 @@
 			# Dummy function to analyze properties.
 			lp = X -> sum(-x for x in X)
 			λ = ones(5)
+			# No need for extensive scales tests, as this was already tested in shift_samples.
+			scales = ones(5)
 			# exp(-64) since the logarithm is taken if log_density = true.
 			levels = [exp(-64),0.5,0.7]
 
 			# 1-index bin (using Sets because concatenation of shift samples no longer ordered).
-			samples, objective_values, thresholds = shift_data(lp,λ,1,levels,true,2,10^3)
+			samples, objective_values, thresholds = shift_data(lp,λ,1,levels,true,2,10^3, scales)
 			# 65 because shift is 64 and initial parameter value is 1.
 			@test Set(samples[:,1]) == Set([0,1,65]) # steps = 2 leads to the shifts -1, 0, +64
 			# No changes outside the bin.
@@ -168,7 +172,7 @@
 			@test Set(thresholds) == Set(log.(levels) .+ lp([0,1,1,1,1]) )
 
 			# 2-index bin.
-			samples, objective_values, thresholds = shift_data(lp,λ,[1,5],levels,true,2,10^3)
+			samples, objective_values, thresholds = shift_data(lp,λ,[1,5],levels,true,2,10^3, scales)
 			# 33 because shift is 32=64/2 and initial parameter value is 1.
 			@test Set(samples[:,1]) == Set([0,1,33])
 			@test Set(samples[:,5]) == Set([0,1,33])
@@ -188,11 +192,13 @@
 			# +105 to ensure positivity and allow for easy shift calculations (-5+105 = 100)
 			p = X -> sum(-x for x in X) + 105 
 			λ = ones(5)
+			# No need for extensive scales tests, as this was already tested in shift_samples.
+			scales = ones(5)
 			# level 1/10 -> single bin shift 90: (-4-(1+90)+105 = 10).
 			levels = [1/10,0.5,0.7]
 
 			# 1-index bin.
-			samples, objective_values, thresholds = shift_data(p,λ,1,levels,false,2,10^3)
+			samples, objective_values, thresholds = shift_data(p,λ,1,levels,false,2,10^3, scales)
 			# 91 because shift is 90 and initial parameter value is 1.
 			@test Set(samples[:,1]) == Set([0,1,91])
 			# No changes outside the bin.
@@ -203,7 +209,7 @@
 			@test Set(thresholds) == Set(levels .* p([0,1,1,1,1]) )
 
 			# 2-index bin.
-			samples, objective_values, thresholds = shift_data(p,λ,[1,5],levels,false,2,10^3)
+			samples, objective_values, thresholds = shift_data(p,λ,[1,5],levels,false,2,10^3, scales)
 			# 46 because shift is 45=90/2 and initial parameter value is 1.
 			@test Set(samples[:,1]) == Set([0,1,46])
 			@test Set(samples[:,5]) == Set([0,1,46])

@@ -43,6 +43,26 @@ serialize("uncertainty/eu.jld", eu)
 serialize("uncertainty/du.jld", du)
 
 
+
+bins, ranges = peak_detection(results.grid,0.01)
+eu = EpitopeUncertainty(condition.data,results.grid,bins, levels = [1e-10,1e-5,0.1,0.25,0.5,0.75,0.9,1], volume_normalization = :linear)
+du = DoseResponseUncertainty(results.grid,eu, u_concentrations, bins = bins)
+
+mkpath("uncertainty_volume")
+serialize("uncertainty_volume/eu.jld", eu)
+serialize("uncertainty_volume/du.jld", du)
+
+
+
+bins, ranges = peak_detection(results.grid,0.01)
+eu = EpitopeUncertainty(condition.data,results.grid,bins, levels = [1e-10,1e-5,0.1,0.25,0.5,0.75,0.9,1], volume_normalization = :log)
+du = DoseResponseUncertainty(results.grid,eu, u_concentrations, bins = bins)
+
+mkpath("uncertainty_log_volume")
+serialize("uncertainty_log_volume/eu.jld", eu)
+serialize("uncertainty_log_volume/du.jld", du)
+
+
 temp_bins, temp_ranges = peak_detection(results.grid,0.01)
 bins = [temp_bins[2]]
 eu = EpitopeUncertainty(condition.data,results.grid,bins, levels = [1e-10,1e-5,0.1,0.25,0.5,0.75,0.9,1], options = condition.options_2)
