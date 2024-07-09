@@ -2,7 +2,7 @@
 
 ## Why `OneDimGrid` objects?
 
-The model generators requires a `OneDimGrid` objects from the [AdaptiveDensityApproximation](@ref AdaptiveDensityApproximation) package (see [Models](@ref binding_models)). For this, the actual weights of the grid do not matter. The model generator returns a new parameter array with the goal to estimate these parameters. At this point it is also possible to choose parameter values for this array and to simulate dose-response curves with the corresponding model function.
+The model generator requires a `OneDimGrid` objects from the [AdaptiveDensityApproximation](@ref AdaptiveDensityApproximation) package (see [Models](@ref binding_models)). For this, the actual weights of the grid do not matter. The model generator returns a new parameter array with the goal to estimate these parameters. At this point it is also possible to choose parameter values for this array and to simulate dose-response curves with the corresponding model function.
 
 But the [AdaptiveDensityApproximation](@ref AdaptiveDensityApproximation) offers additional methods, e.g. the name-giving adaptive approximation of densities or additional density conversion / analysis tools. For this reason, internal methods use `OneDimGrid` objects and construct the model functions from scratch for the calculation of dose-response curves. This is, among others, the reason why most functions (e.g. the convenience functions of [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience)) return or expect those grids. 
 

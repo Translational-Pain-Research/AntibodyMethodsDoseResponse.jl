@@ -2,12 +2,12 @@
 
 ## About
 
-This package implements methods to analyze rate-constant distributions for (antibody-binding) dose-response curves, keeping the dependencies as minimal as possible. This assures the most general compatibility and allows to define the analysis from scratch, submitting custom minimization functions.
+This package implements methods to analyze rate-constant distributions for (antibody-binding) dose-response curves, keeping the dependencies as minimal as possible. This assures the most general compatibility and allows to define the analysis from scratch.
 
 !!! info "Convenience package"
 	For most users, this minimal approach and the additional flexibility may not be very useful. Instead, the [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience) package should be preferred, as it pre-defines the recommended analyses and implements the necessary functions.
 
-In essence, the dose-response data is modelled by the following accumulation model:
+In essence, the dose-response data is modelled by the following accumulation model (see [https://arxiv.org/abs/2407.06052](https://arxiv.org/abs/2407.06052) for further details):
 ```math
 r(a) = \int_0^\infty g(K_\tau) \left(1- e^{-\frac{a}{K_\tau}} \right) \ dK_\tau
 ```
@@ -97,3 +97,8 @@ Pkg.add(url="https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConv
 
 !!! info
 	`AntibodyMethodsDoseResponseRecipes` contains plotting instructions for `Plots.jl`, allowing to plot the data structures defined/used in `AntibodyMethodsDoseResponse`.
+
+
+## How to cite the package
+
+If you would like to cite this package for scientific purposes, you might also want to cite the corresponding paper [https://arxiv.org/abs/2407.06052](https://arxiv.org/abs/2407.06052).
