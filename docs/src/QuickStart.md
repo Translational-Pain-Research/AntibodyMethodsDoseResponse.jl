@@ -72,14 +72,21 @@ nothing # hide
 After defining a [`FittingCondition`](@ref), the data can be analyzed to obtain the estimated ``K_\tau``-density. Since the fitting instructions are already contained in the [`FittingCondition`](@ref) object, fitting the data is just a simple function call:
 
 ```julia
-results, data, replicates = fit_condition(fitting_condition)
+results = fit_condition(fitting_condition)
 ```
 
-[`fit_condition`](@ref) returns an [`AdaptiveResult`](@ref) object `results`, the `data` as [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object and the `replicates` as array of [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects for the respective replicates. If a `path` is specified in the [`FittingCondition`](@ref) object, the returned objects are also saved into files.
+[`fit_condition`](@ref) returns an [`AdaptiveResult`](@ref) object `results`. If a `path` is specified in the [`FittingCondition`](@ref) object, the results and data are also saved into files.
 
-## Loading results*
+To keep the rest of this tutorial identical for both cases, results and data just obtained and results and data loaded from files, we define:
 
-In general, it is not necessary to load the results, as [`fit_condition`](@ref) returns all results. However, since the fitting process is time-consuming, it is a good idea to save the results into files (see `path` keyword above). After e.g. a restart of Julia, the results can be loaded as follows:
+```julia
+data = fitting_condition.data
+replicates = fitting_condition.replicates
+```
+
+## Loading results
+
+In general, it is not necessary to load the results, as [`fit_condition`](@ref) returns the results. However, since the fitting process is time-consuming, it is a good idea to save the results into files (see `path` keyword above). After e.g. a restart of Julia, the results and data can be loaded as follows:
 
 
 ```julia
@@ -96,6 +103,8 @@ This allows to re-plot the results at a later time, without the need to re-run t
 	The default distributions created by the `FittingCondition` constructor are
 
 		(y,m,Δy)-> -(y-m)^2/Δy^2
+
+
 
 ## Plotting the results
 
