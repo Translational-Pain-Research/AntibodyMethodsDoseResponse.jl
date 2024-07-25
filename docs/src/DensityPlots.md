@@ -19,11 +19,11 @@ approximate_density!(grid, p, volume_normalization = true)
 plot(grid, xaxis = :log)
 ```
 
-While the grid-plot can be helpful, it can also be distracting for assessing the density approximation. Especially since the weights (and thus the bar heights) of the grid correspond to the area under the density function (for the respective interval).
+While the grid-plot can be helpful, it can also be distracting for an assessment of the density approximation. 
 
 ## The `DensityPlot` recipe
 
-The `AntibodyMethodsDoseResponseRecipes` package offers a plotting recipe to plot the density that a `OneDimGrid` approximates (this package is automatically imported by [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience)):
+The [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) package offers a plotting recipe to plot the density that a `OneDimGrid` approximates (this package is automatically imported by [`AntibodyMethodsDoseResponseConvenience.jl`](@ref api_convenience)):
 
 ```@example ResultsAndSimulations
 plot(DensityPlot(grid), xaxis = :log, fill = 0, volume_normalization = :linear, label = ":linear")
@@ -32,11 +32,13 @@ plot(DensityPlot(grid), xaxis = :log, fill = 0, volume_normalization = :linear, 
 Observe that the ``y``-axis now has the same scale as in the density plot.
 
 !!! info "volume_normalization"
-	The `OneDimGrid` weights correspond to the number of epitopes ``\lambda_j`` with ``K_\tau`` in a given interval ``I_j``, not to the density value ``g_j = \frac{\lambda_j}{\text{length}(I_j)}``. Thus it is necessary divide the weights by the interval lengths (`volume_normalization = :linear`) to obtain the density. However, using the visual volumes of the logarithmic scale (`volume_normalization = :log`) represents the contribution of peaks to the dose-response curve more accurately (see [Background: log-volume normalization](@ref log_volume_normalization)). Hence, it is the default normalization despite not being the "true" density plot.
+	The `OneDimGrid` weights correspond to the number of epitopes ``\lambda_j`` with ``K_\tau`` in a given interval ``I_j``, not to the density value ``g_j = \frac{\lambda_j}{\text{length}(I_j)}``. Thus it is necessary to divide the weights by the interval lengths (`volume_normalization = :linear`) to obtain the true density shape. However, using the visual volumes of the logarithmic scale (`volume_normalization = :log`) represents the contribution of peaks to the dose-response curve more accurately (see [Background: log-volume normalization](@ref log_volume_normalization)). Hence, it is the default normalization despite not being the "true" density plot.
 
 
 ```@example ResultsAndSimulations
-plot(DensityPlot(grid), xaxis = :log, volume_normalization = :none, fill = 0, fillapha = 0.5, label = ":none = grid plot", legend = :topleft)
+plot(DensityPlot(grid), xaxis = :log, volume_normalization = :none, 
+	fill = 0, fillapha = 0.5, label = ":none = grid plot", legend = :topleft)
+
 plot!(DensityPlot(grid), volume_normalization = :log, fill = 0, fillalpha = 0.5, label = ":log")
 ```
 
@@ -60,7 +62,7 @@ plot!(DensityAnnotations(grid), xaxis = :log,
 * `annotation_bins = []`: The selected bins as vector of vectors. The bins are selected based on the ``K_\tau`` value, not based on the grid interval index. 
 * `annotation_size = 10`: Font size for the annotation labels (that show the number of epitopes within the bin).
 * `annotation_offset = 0.05`: Offset of the annotation labels from the top of the plot (as fraction of the plot height). When a single `value` is provided, the offsets alternate between `0` and the provided `value`. Alternatively, the offsets can be provided independently for each annotation bin, by providing a length-matched array of offsets.
-* `hover_points = false`: Only recommended if the `Plotly.jl` backend is used. If `true`, scatter points with the annotation label as tooltip are added, as `Plotly.jl` handles annotations differently.
+* `hover_points = false`: Only recommended if the [Plotly/PlotlyJs backend](https://docs.juliaplots.org/latest/backends/) is used. If `true`, scatter points with the annotation label as tooltip are added, as the [Plotly/PlotlyJs backend](https://docs.juliaplots.org/latest/backends/) handles annotations differently.
 * `annotation_color = :black`: The color for the annotation labels and bin lines.
 
 

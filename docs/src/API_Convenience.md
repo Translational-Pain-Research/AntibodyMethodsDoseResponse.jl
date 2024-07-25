@@ -35,7 +35,7 @@ load_results
 ## Modify default plotting options
 
 !!! info
-	In the plotting functions, the default options are not set up as tuples of keyword arguments, but instead as function calls. The following functions generate the default keyword arguments, but allow to selectively change individual keywords or pass new `Plots.jl` keywords. In this way, changing the keywords does not require to manually repeat the unchanged default keyword arguments.
+	In the plotting functions, the default options are not defined as tuples of keyword arguments, but as function calls. The following functions generate the default keyword arguments, but allow to selectively change individual keywords or pass new [`Plots.jl`](https://docs.juliaplots.org/stable/) keywords. In this way, changing the keywords does not require to manually repeat the unchanged default keyword arguments.
 
 
 ```@docs

@@ -31,11 +31,12 @@ Data type to store uncertainty estimates for the `weights` of a K_τ `grid`.
 
 **Construction from bin-wise shifting**
 
-	EpitopeUncertainty(data::FittingData,grid::OneDimGrid, bins = collect(1:length(grid)); keywords...)
+	EpitopeUncertainty(data::FittingData,grid::OneDimGrid, bins = collect(1:length(grid)); 
+		keywords...)
 
 Estimate uncertainty by shifting all grid weights uniformly, one bin at a time, while keeping the other bins fixed. Admissible weights (for a given level) are determined by calculating the objective-function value (objective function automatically generated) for the shifted weights.
 
-The bins can be defined as vector of indices, e.g. `[[1,2,3],[4,5,6]]` or `[1,3,5]` which is converted to `[[1],[3],[5]]`. To obtain bin indices from the grid-domain, use [`select_indices`](@ref).
+The bins can be defined as vector of indices, e.g. `[[1,2,3],[4,5,6]]` or `[1,3,5]` which is converted to `[[1],[3],[5]]`. To obtain bin indices from the grid-domain, use [`select_indices`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.select_indices).
 
 The following keywords are available:
 
@@ -43,7 +44,7 @@ The following keywords are available:
 * `steps::Integer = 10^4`: Number of intermediate shifts to be tested. The maximal shift range is determined automatically.
 * `bisections::Integer = 10^2`: Number of interval-bisection steps to determine the maximal shift range.
 * `volume_normalization = :none`: Changes the scaling of the weight shifts for each individual weight in a bin. Use `:none` to apply the same shift for each weight. Use `:linear` to scale the shifts with the interval volumes corresponding to the weights.  And use `:log` to scale the sifts with the visual interval volumes (as they appear in a logarithmic plot) corresponding to the weights.
-* `options::AdaptiveOptions = AdaptiveOptions()`: The objective function is automatically generated, using the same construction as [`adaptive_dose_response_fit`](@ref). See [`AdaptiveOptions`](@ref) and [`adaptive_dose_response_fit`](@ref) for the details. To use the best offset estimation from a fit result that included the offset parameter, add the estimated value (e.g. from an `AdaptiveResult` object `result`) to the `AdaptiveOptions` with the `offset` keyword: `options = AdaptiveOptions(other_options..., offset = result.optimizer[end])`.
+* `options::AdaptiveOptions = AdaptiveOptions()`: The objective function is automatically generated, using the same construction as [`adaptive_dose_response_fit`](@ref). See [`AdaptiveOptions`](@ref) and [`adaptive_dose_response_fit`](@ref) for the details. To use the offset estimation from a fit result, add the estimated value to the [`AdaptiveOptions`](@ref) with the `offset` keyword: `options = AdaptiveOptions(other_options..., offset = estimated_offset)`.
 
 
 
@@ -60,7 +61,7 @@ Estimate the uncertainty as credibility intervals (symmetric interval around the
 
 The following keywords are available:
 
-* `levels = collect(0.1:0.1:1)`: The uncertainty levels as fractions of the best objective value.
+* `levels = collect(0.1:0.1:1)`: The uncertainty levels as quantiles.
 * `offset::Bool = false`: If `true` the last parameter element is treated as offset parameter, otherwise, all parameters are treated as grid weights.
 """
 struct EpitopeUncertainty
@@ -103,7 +104,7 @@ end
 """
 	struct DoseResponseUncertainty
 
-Data type to store uncertainty estimates for the response values of a `DoseResponseResult` object.
+Data type to store uncertainty estimates for the response values of a [`DoseResponseResult`](@ref) object.
 
 **Fields**
 
@@ -126,16 +127,20 @@ Data type to store uncertainty estimates for the response values of a `DoseRespo
 
 **Construction from an EpitopeUncertainty object**
 
-	DoseResponseUncertainty(grid::OneDimGrid,eu::EpitopeUncertainty,concentrations::AbstractVector; keywords...)
+	DoseResponseUncertainty(grid::OneDimGrid,
+		eu::EpitopeUncertainty,
+		concentrations::AbstractVector; 
+		keywords...
+	)
 
-Estimate the dose-response uncertainty from an `EpitopeUncertainty` object `eu` for the passed `concentrations`. The `grid` should be the grid that was used to create the `EpitopeUncertainty` object `eu` with.
+Estimate the dose-response uncertainty from an [`EpitopeUncertainty`](@ref) object `eu` for the provided `concentrations`. The `grid` should be the grid that was used to create the `EpitopeUncertainty` object `eu`.
 
 The following keywords are available:
 
-* `bins = [collect(1:length(grid))]`: The response bounds are calculated as point-wise minima/maxima of responses created from the grid weights, where one bin at a time is replaced with the `EpitopeUncertainty` lower and upper bound, while keeping the other weights fixed. For the minima/maxima all response values, iterating over all bins, are considered. Ideally, the bins should correspond to the bins that were used to construct the [`EpitopeUncertainty`](@ref) object `eu` with.
-* `model::Function = accumulation_model`: The model that is used to calculate the responses from. The available model functions are [`accumulation_model`](@ref), [`accumulation_inv_const_model`](@ref), [`langmuir_model`](@ref) and [`langmuir_inv_const_model`](@ref).
+* `bins = [collect(1:length(grid))]`: The response bounds are calculated as point-wise minima/maxima of responses created from the grid weights, where one bin at a time is replaced with the [`EpitopeUncertainty`](@ref) lower and upper bound, while keeping the other weights fixed. For the minima/maxima all response values, iterating over all bins, are considered. Ideally, the bins should correspond to the bins that were used to construct the [`EpitopeUncertainty`](@ref) object `eu`.
+* `model::Function = accumulation_model`: The model that is used to calculate the response values. The available model functions are [`accumulation_model`](@ref), [`accumulation_inv_const_model`](@ref), [`langmuir_model`](@ref) and [`langmuir_inv_const_model`](@ref).
 
-There is no `offset` keyword, as the offsets are determined by the `EpitopeUncertainty` object.
+There is no `offset` keyword, as the offsets are determined by the [`EpitopeUncertainty`](@ref) object.
 """
 struct DoseResponseUncertainty
 	levels::Vector{T} where T <: Real

@@ -65,14 +65,18 @@ end
 
 
 """
-	peak_detection(grid::OneDimGrid, relative_threshold::Real = 0.1; volume_normalization::Symbol = :log, fill::Bool = true)
+	peak_detection(grid::OneDimGrid, relative_threshold::Real = 0.1; 
+		volume_normalization::Symbol = :log, 
+		fill::Bool = true
+	)
+
 Return `(peak_group_indices,peak_group_domains)` w.r.t. the `relativ_ threshold`.
 
-* `peak_group_indices` the index-vectors of the peaks. The indices correspond to exported grid centers/volumes/weights (see [`export_weights`](@ref) and [`export_all`](@ref)).
+* `peak_group_indices` contains the index-vectors of the peaks. The index order is the order of [`export_weights`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_weights) and [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all).
 * `peak_group_domains` contains the intervals covered by the respective peaks.
 * The cutoff threshold is determined by `relative_threshold * largest_weight`.
 * If `fill == true`, the gaps between the peaks are added to `peak_group_indices` and `peak_group_domains`.
-* `volume_normalization` normalizes the weights of the grid (without mutation). `:none` uses the raw weights. `:linear` divides the weights by the block volume and `:log` divides the weight by the block volume in a logarithmic scale.
+* `volume_normalization` normalizes the weights of the grid (without mutation) before the peaks are determined. `:none` uses the raw weights. `:linear` divides the weights by the block volume and `:log` divides the weight by the block volume in a logarithmic scale.
 """
 function peak_detection(grid::AdaptiveDensityApproximation.OneDimGrid, relative_threshold::Real = 0.1; volume_normalization::Symbol = :log, fill::Bool = true)
 

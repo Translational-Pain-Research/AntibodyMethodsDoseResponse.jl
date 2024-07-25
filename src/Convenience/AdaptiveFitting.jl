@@ -9,8 +9,10 @@
 export area_scaled_variation, log_area_scaled_variation
 
 """
-	area_scaled_variation(center, volume, weight, neighbor_centers, neighbor_volumes, neighbor_weights)
-Block variation function for [`refine!`](@ref). Variation value based on the difference of the weights, scaled with the area (volume) of the corresponding block.
+	area_scaled_variation(center, volume, weight, 
+		neighbor_centers, neighbor_volumes, neighbor_weights)
+
+Block variation function for [`refine!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!). Variation value based on the difference of the weights, scaled with the area (volume) of the corresponding block.
 
 	mean(@. abs(weight * volume - neighbor_weights * neighbor_volumes))
 """
@@ -19,8 +21,10 @@ function area_scaled_variation(center, volume, weight, neighbor_centers, neighbo
 end
 
 """
-	log_area_scaled_variation(center, volume, weight, neighbor_centers, neighbor_volumes, neighbor_weights)
-Block variation function for [`refine!`](@ref). Variation value based on the difference of the weight, scaled with the visible area (in a logarithmic plot) of the corresponding block.
+	log_area_scaled_variation(center, volume, weight, 
+		neighbor_centers, neighbor_volumes, neighbor_weights)
+
+Block variation function for [`refine!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!). Variation value based on the difference of the weight, scaled with the visible area (in a logarithmic plot) of the corresponding block.
 
 	log_volume = (log10(center + volume / 2) - log10(center - volume / 2))
 	neighbor_log_volumes = @. (log10(neighbor_centers + neighbor_volumes / 2) - log10(neighbor_centers - neighbor_log_volumes / 2))
@@ -70,7 +74,7 @@ end
 
 """
 	mutable struct AdaptiveOptions
-Data type to define adaptive_dose_response_fit options.
+Data type to define [`adaptive_dose_response_fit`](@ref) options.
 
 **Constructor**
 
@@ -78,16 +82,16 @@ Data type to define adaptive_dose_response_fit options.
 
 The following keywords (with default values) are available:
 
-* `name::AbstractString = "Adaptive optimization`: The name that is used when `show_progress==true`.
+* `name::AbstractString = "Adaptive optimization"`: The name that is used when `show_progress==true`.
 * `show_progress::Bool = true`: Show progress in standard output.
 * `iterations::Integer = 1`: Number of refinement iterations.
 * `model::Function = accumulation_model`: The model-function that is used for the data-fit. The available model functions are [`accumulation_model`](@ref), [`accumulation_inv_const_model`](@ref), [`langmuir_model`](@ref) and [`langmuir_inv_const_model`](@ref).
 * `offset = nothing`: Offset parameter for the model function. If `nothing`, no offset is used.
 * `objective::Symbol = :lsq`. The objective function for the data-fit. Available are `:lsq`, `:posterior` and `:log_posterior`.
-* `prior_generator::Function = default_prior_generator`: The function that generates the prior. The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> prior(λ)`. The `default_prior_generator` generates a uniform prior `λ-> 0` for the log-posterior objective.
-* `distribution_derivatives = nothing`: Array of partial derivatives of the logarithmic distributions for the log-posterior objective. See [`log_posterior_gradient`](@ref).
-* `prior_gradient_generator = default_prior_gradient_generator`: The function that generates the prior-gradient (see  [`log_posterior_gradient`](@ref)). The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> ∇prior(λ)`. The `default_prior_gradient_generator` returns `nothing` which internally corresponds to the uniform prior for the log-posterior objective.
-* `block_variation::Function =` [`log_area_scaled_variation`](@ref) and `selection::Function = maximum` are the refinement options of [`refine!`](@ref).
+* `prior_generator::Function = default_prior_generator`: The function that generates the prior. The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> prior(λ)` or `λ-> log_prior(λ)` in case of a `:log_posterior` objective. The `default_prior_generator` generates a uniform prior `λ-> 0` for the log-posterior objective.
+* `distribution_derivatives = nothing`: Array of partial derivatives of the logarithmic distributions for the log-posterior objective. See [`log_posterior_gradient`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.log_posterior_gradient).
+* `prior_gradient_generator = default_prior_gradient_generator`: The function that generates the log-prior gradient (see  [`log_posterior_gradient`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.log_posterior_gradient)). The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> ∇log_prior(λ)`. The `default_prior_gradient_generator` returns `nothing` which internally corresponds to the uniform prior for the log-posterior objective.
+* `block_variation::Function =` [`log_area_scaled_variation`](@ref) and `selection::Function = maximum` are the refinement options of [`refine!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!).
 """
 mutable struct AdaptiveOptions
 	name::AbstractString
@@ -137,7 +141,7 @@ Data type used by [`adaptive_dose_response_fit`](@ref) to summarize the results.
 
 The struct has the following fields:
 
-* `result`: The `DoseResponseResult` object corresponding to the fit result.
+* `result`: The [`DoseResponseResult`](@ref) object corresponding to the fit result.
 * `grid`: The grid (with imported weights) corresponding to the fit result.
 * `optimizer`: The raw result parameter.
 * `objective_value`: The objective-function value of `optimizer`.
@@ -223,17 +227,21 @@ end
 
 
 """
-	adaptive_dose_response_fit(initial_grid::OneDimGrid, data::FittingData, minimizer::Function; options::AdaptiveOptions=AdaptiveOptions())
+	adaptive_dose_response_fit(initial_grid::OneDimGrid, 
+		data::FittingData, 
+		minimizer::Function; 
+		options::AdaptiveOptions=AdaptiveOptions()
+	)
 
-Fit dose-response `data` (with adaptive grid refinements depending on the `options`) and return an [`AdaptiveResult`](@ref) object. The initial gird is not mutated. For the `AdaptiveResult` object a copy of the gird is created.
+Fit dose-response `data` (with adaptive grid refinements depending on the `options`) and return an [`AdaptiveResult`](@ref) object. The initial gird is not mutated. For the [`AdaptiveResult`](@ref) object a copy of the gird is created.
 
 
 **Minimizer function**
 
-* The sign of Posterior and Log-posterior objectives is flipped for consistency reasons. A minimizer needs to be used for all objectives (`:lsq`, `:posterior`, `:log_posterior`).
-* `minimizer`: This is the function that minimizes the objective function. It needs to be specified by the user and must have the signature `(objective_function, objective_gradient!,parameters)`.
+* The sign of posterior and log-posterior objectives is flipped for consistency reasons. A minimizer needs to be used for all objectives (`:lsq`, `:posterior`, `:log_posterior`).
+* `minimizer`: The function that minimizes the objective function. It needs to be specified by the user and must have the signature `(objective_function, objective_gradient!,parameters)`.
 * The `objective_function` always has the signature `(parameters)`.
-* The `objective_gradient!` can be `nothing`. Otherwise it has the signature `(gradient_vector, parameter)`. It mutates the `gradient_vector` and returns the mutated `gradient_vector`.
+* The `objective_gradient!` can be `nothing`. Otherwise it must have the signature `(gradient_vector, parameter)`. It must mutate the `gradient_vector` and return the mutated `gradient_vector`.
 * `parameters` is the initial parameter array to start minimization from.
 
 **Gradients for minimization**

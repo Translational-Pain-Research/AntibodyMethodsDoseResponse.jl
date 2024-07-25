@@ -2,14 +2,14 @@
 
 ## [Binding models](@id binding_models)
 
-This package provides 2 binding model kernels:
+Two binding model kernels are available:
 
 ```math
 \text{Accumulation:}\quad  x(a) = g(1-e^{-\frac{a}{K_\tau}})\qquad \text{and}\qquad \text{Langmuir isotherm:}\quad x(a) = \frac{g}{1+\frac{K_d}{a}}
 ```
 
 * The Langmuir isotherm describes the equilibrium of binding (with rate ``k_{\text{on}}``) and unbinding (with rate ``k_{\text{off}}``) of antibodies, which is characterized by the **dissociation constant** ``K_d = \frac{k_{\text{off}}}{k_{\text{on}}}``.
-* The accumulation model describes the accumulation of antibodies (with rate ``k_{\text{on}}``) during the incubation time ``\tau``, which is characterized by the **accessibility limitation constant** ``K_\tau = \frac{1}{k_{\text{on}}\cdot \tau}``.
+* The accumulation model describes the accumulation of antibodies (with rate ``k_{\text{on}}``) during the incubation time ``\tau``, which is characterized by the **accessibility constant** ``K_\tau = \frac{1}{k_{\text{on}}\cdot \tau}``.
 
 !!! tip "Jovanovic isotherm"
 	The accumulation model resembles the *Jovanovic isotherm* structurally. However, the Jovanovic isotherm describes an equilibrium of binding and unbinding processes, whereas the accumulation model describes the accumulation over time, which is stopped at a finite time ``\tau`` before reaching the saturation. Nevertheless, because of the structural similarity, the accumulation model can be used as drop-in replacement to analyze equilibrium data with the Jovanovic isotherm.
@@ -24,7 +24,7 @@ Both model kernels are used for the rate constant distribution approach [(Svitel
 \text{Langmuir model:} \quad  x(a) &= \int_0^\infty \frac{g(k)}{1+\frac{k}{a}} \ dk\ .
 \end{aligned}
 ```
-In both cases, the density ``g(k)`` describes the number of epitopes that exhibit the respective constant ``k`` (accessibility limitation / dissociation depending on the model). The density approach models the superposition of different classes of epitopes being present in the system at the same time (e.g. in complex cellular systems).
+In both cases, the density ``g(k)`` describes the number of epitopes that exhibit the respective constant ``k`` (accessibility / affinity depending on the model). The density approach models the superposition of different classes of epitopes being present in the system at the same time (e.g. in complex cellular systems).
 
 
 
@@ -46,7 +46,7 @@ x(a) \approx \sum_{j=1}^m g_j \int_{I_j}(1-e^{-\frac{a}{k}})\ dk\ .
 ```
 Thus, the inference problem is the estimation of the parameters ``g_1,\ldots, g_m``.
 
-The intervals ``I_j`` and the weights ``g_j`` are implemented as one-dimensional grid with the [AdaptiveDensityApproximation](@ref AdaptiveDensityApproximation) package.
+The intervals ``I_j`` and the weights ``g_j`` are implemented as one-dimensional grid with [`AdaptiveDensityApproximation.jl`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/).
 
 ```@example Models
 using AntibodyMethodsDoseResponseConvenience #hide
@@ -54,13 +54,13 @@ using AdaptiveDensityApproximation
 grid = create_grid([1,2,3,5])
 ```
 
-The example above created a grid corresponding to the intervals ``\{[1,2],[2,3],[3,5]\}`` with weights ``g_j = 1``.  To view the grid properties, the `AdaptiveDensityApproximationRecipes` package can be used:
+The example above created a grid corresponding to the intervals ``\{[1,2],[2,3],[3,5]\}`` with weights ``g_j = 1``.  To view the grid properties, [`AdaptiveDensityApproximationRecipes.jl`](https://github.com/AntibodyPackages/AdaptiveDensityApproximationRecipes.jl) can be used:
 ```@example Models
 using AdaptiveDensityApproximationRecipes, Plots
 plot(grid)
 ```
 
-New weights can be set with [`import_weights!`](@ref):
+New weights can be set with [`import_weights!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.import_weights!):
 ```@example Models
 import_weights!(grid, [1,2,0.5])
 plot(grid)
@@ -83,10 +83,10 @@ Finally, the analytical solution of ``\int_{I_j}(1-e^{-\frac{a}{k}})\ dk`` requi
 ```
 
 !!! info "Weights of the grid"
-	Because of the above model, the weights of `OneDimGrid` objects are always treated as ``\lambda_j`` throughout this package. Thus, they describe the number of epitopes with ``K_\tau`` in the given interval, not the ``K_\tau``-density value!
+	The weights of `OneDimGrid` objects are always treated as ``\lambda_j`` for the analysis of dose-response data. Thus, the weights describe the number of epitopes with ``K_\tau`` in the given interval, not the ``K_\tau``-density value!
 
 !!! remark "Inverse constant"
-	To solve the problem of integrability, the inverse constant ``\widetilde{K} = \frac{1}{K_\tau}`` can be used: 
+	To solve the integrals analytically, the inverse constant ``\widetilde{K} = \frac{1}{K_\tau}`` can be used: 
 	```math
 	\int (1-e^{-a\cdot \widetilde{k}}) \ d \widetilde{k} = \frac{e^{-a\cdot \widetilde{k}}}{a} + \widetilde{k} + \text{constant}\ .
 	```
@@ -101,7 +101,7 @@ model, init_params, centers, volumes = accumulation_model(grid, offset = 10)
 nothing #hide
 ```
 
-`model` is a [`ModelFunctions`](@ref) object from the [FittingObjectiveFunctions](@ref FittingObjectiveFunctions) package, containing both the model function and the partial derivatives w.r.t. to the parameters.
+`model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object from [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/), containing both the model function and the partial derivatives w.r.t. to the parameters.
 
 `init_params` contains the weights of the grid, and as last element the `offset` if `offset != nothing`:
 
@@ -124,29 +124,23 @@ println(volumes)
 
 ## Tips for girds
 
-Choosing unequal interval sizes in the example above was not just for demonstration purposes. In fact, a rule of thumb for the ``K_\tau`` range is to use the concentration/dilution range of the dose-response curve, which often spans multiple orders of magnitude. Consider for example the range ``[10^{-8},10^{-2}]``:
+Choosing unequal interval sizes in the example above was not just for demonstration purposes. In fact, a rule of thumb for the ``K_\tau`` domain is to use the concentration/dilution range of the dose-response curve, which often spans multiple orders of magnitude. Consider for example the domain ``[10^{-8},10^{-2}]``:
 
 ```@example Models
 plot(create_grid(LinRange(1e-8,1e-2,50)))
 ```
 
-In a linear scale, this interval discretization seems to resolve the range well enough. But plotting the same grid in a logarithmic scale leads to:
+In a linear scale, this interval discretization seems to resolve the domain well enough. But plotting the same grid in a logarithmic scale leads to:
 
 ```@example Models
 plot(create_grid(LinRange(1e-8,1e-2,50)), xaxis = :log, xticks = [10.0^-i for i in 2:8])
 ```
 
-Equally sized intervals poorly resolve the smaller orders of magnitude. A single interval covers the range ``[10^{-8},10^{-4}]``, while almost all intervals subdivide the range ``[10^{-3},10^{-2}]``. A solution for this problem is to use logarithmically sized intervals:
+Equally sized intervals poorly resolve the smaller orders of magnitude. A single interval covers the domain ``[10^{-8},10^{-4}]``, while almost all intervals subdivide the domain ``[10^{-3},10^{-2}]``. A solution for this problem is to use logarithmically sized intervals:
 
 ```@example Models
 plot(create_grid(LogRange(1e-8,1e-2,50)), xaxis = :log, xticks = [10.0^-i for i in 2:8])
 ```
 
 !!! tip "LogRange"
-	Julia provides the `LinRange` function to create equally spaced points in a given range. This package adds [`LogRange`](@ref) to create logarithmically spaced points in a given range, following the same syntax: `LinRange(start, stop, n_points, [base = 10])`.
-
-Inspecting the logarithmic grid in a linear scale shows that the intervals still resolve the larger orders of magnitude of the range reasonably well.
-
-```@example Models
-plot(create_grid(LogRange(1e-8,1e-2,50)))
-```
+	Julia provides the `LinRange` function to create equally spaced points in a given range. [`AntibodyMethodsDoseResponse.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponse.jl) adds [`LogRange`](@ref) to create logarithmically spaced points in a given range, following the same general syntax: `LogRange(start, stop, n_points, [base = 10])`.

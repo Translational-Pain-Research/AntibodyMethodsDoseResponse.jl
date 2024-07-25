@@ -53,21 +53,21 @@ end
 	accumulation_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope accumulation model. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](@ref)
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
 
 **Model function**
 
 The following model function and partial derivatives are used:
 
 ```math 
-\text{model}(a,\lambda) = \lambda_e + \sum_i \lambda_i \left(1-e^{-\frac{a}{c_i}}\right)  \approx  \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\lambda(k)}{u_i-l_i}\left(1-e^{-\frac{a}{k}}\right) \ dk 
+\text{model}(a,\lambda) = \lambda_e + \sum_i \lambda_i \left(1-e^{-\frac{a}{c_i}}\right)  \approx  \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\lambda_i}{u_i-l_i}\left(1-e^{-\frac{a}{k}}\right) \ dk 
 ```
 ```math 
 \partial_{\lambda_j} \text{model}(a,\lambda) = 1-e^{-\frac{a}{c_i}} \quad, \qquad \partial_{\lambda_e} \text{model}(a,\lambda) = 1
 ```
-where `a` is the antibody concentration, `c_i` are the centers of the `grid` intervals `[u_i,l_i]` and `λ_e` is the offset (if `offset != nothing`).
+where ``a`` is the antibody concentration, ``c_i`` are the centers of the `grid` intervals ``[u_i,l_i]`` and ``\lambda_e`` is the offset (if `offset != nothing`).
 """
 function accumulation_model(grid::AdaptiveDensityApproximation.OneDimGrid ; offset::Union{Nothing,R} = nothing) where R <: Real
 	density_grid_tests(grid)
@@ -102,21 +102,21 @@ end
 	accumulation_inv_const_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope accumulation model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](@ref)
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
 
 **Model function**
 
 The following model function and partial derivatives are used:
 
 ```math 
-\text{model}(a,\lambda) = \lambda_e + \sum_i \lambda_i \left(1+\frac{1}{a\cdot(u_i-l_i)}\left(e^{-a u_i}-e^{-a l_i} \right) \right) =   \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\lambda(k)}{u_i-l_i}\left(1-e^{-a k}\right) \ dk 
+\text{model}(a,\lambda) = \lambda_e + \sum_i \lambda_i \left(1+\frac{1}{a\cdot(u_i-l_i)}\left(e^{-a u_i}-e^{-a l_i} \right) \right) =   \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\lambda_i}{u_i-l_i}\left(1-e^{-a k}\right) \ dk 
 ```
 ```math 
 \partial_{\lambda_j} \text{model}(a,\lambda) = 1+\frac{1}{a\cdot(u_i-l_i)}\left(e^{-a u_i}-e^{-a l_i} \right) \quad, \qquad \partial_{\lambda_e} \text{model}(a,\lambda) = 1
 ```
-where `a` is the antibody concentration, `c_i` are the centers of the `grid` intervals `[u_i,l_i]` and `λ_e` is the offset (if `offset != nothing`).
+where ``a`` is the antibody concentration, ``c_i`` are the centers of the `grid` intervals ``[u_i,l_i]`` and ``\lambda_e`` is the offset (if `offset != nothing`).
 """
 function accumulation_inv_const_model(grid::AdaptiveDensityApproximation.OneDimGrid ; offset::Union{Nothing,R} = nothing) where R <: Real
 	density_grid_tests(grid)
@@ -164,9 +164,9 @@ end
 	langmuir_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope Langmuir model. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](@ref).
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all).
 
 
 **Model function**
@@ -174,12 +174,12 @@ Create a multi-epitope Langmuir model. Returns `(model,λ,centers,volumes)` wher
 The following model function and partial derivatives are used:
 
 ```math 
-\text{model}(a,\lambda) = \lambda_e + \sum_i \frac{\lambda_i\cdot a}{ (u_i - l_i)} \ln\left(\frac{a+u_i}{a+l_i}\right)  =  \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\frac{\lambda(k)}{u_i - l_i}}{1+\frac{k}{a}} \ dk 
+\text{model}(a,\lambda) = \lambda_e + \sum_i \frac{\lambda_i\cdot a}{ (u_i - l_i)} \ln\left(\frac{a+u_i}{a+l_i}\right)  =  \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\frac{\lambda_i}{u_i - l_i}}{1+\frac{k}{a}} \ dk 
 ```
 ```math 
 \partial_{\lambda_j} \text{model}(a,\lambda) = \frac{a}{u_j-l_j} \ln\left(\frac{a+u_j}{a+l_j}\right)\quad, \qquad \partial_{\lambda_e} \text{model}(a,\lambda) = 1
 ```
-where `a` is the antibody concentration, `[l[i],u[i]]` are the intervals of the `grid` and `λ_e` is the offset (if `offset != nothing`).
+where ``a`` is the antibody concentration, ``[l_i,u_i]`` are the intervals of the `grid` and ``\lambda_e`` is the offset (if `offset != nothing`).
 """
 function langmuir_model(grid::AdaptiveDensityApproximation.OneDimGrid ; offset::Union{Nothing,R} = nothing) where R <: Real
 	density_grid_tests(grid)
@@ -215,23 +215,23 @@ end
 
 @doc raw"""
 	langmuir_inv_const_model(grid::OneDimGrid; offset = nothing)
-Create a multi-epitope Langmuir model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
+Create a multi-epitope Langmuir model with `1/K_d = k_a / k_d` as constant domain. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](@ref FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](@ref)
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
 
 **Model function**
 
 The following model function and partial derivatives are used:
 
 ```math 
-\text{model}(a,\lambda) = \lambda_e + \sum_i \lambda_i \left(1+ \frac{1}{a\cdot (u_i-l_i)} \ln\left(\frac{a l_i +1}{a u_i +1}\right)\right)  = \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\frac{\lambda(k)}{u_i - l_i}}{1+\frac{1}{a\cdot k}} \ dk  
+\text{model}(a,\lambda) = \lambda_e + \sum_i \lambda_i \left(1+ \frac{1}{a\cdot (u_i-l_i)} \ln\left(\frac{a l_i +1}{a u_i +1}\right)\right)  = \lambda_e + \sum_i \int_{l_i}^{u_i} \frac{\frac{\lambda_i}{u_i - l_i}}{1+\frac{1}{a\cdot k}} \ dk  
 ```
 ```math 
 \partial_{\lambda_j} \text{model}(a,\lambda) = 1+ \frac{1}{a\cdot (u_i-l_i)} \ln\left(\frac{a l_i +1}{a u_i +1}\right)\quad, \qquad \partial_{\lambda_e} \text{model}(a,\lambda) = 1
 ```
-where `a` is the antibody concentration, `[l[i],u[i]]` are the intervals in the `grid` and `λ_e` is the offset (if `offset != nothing`).
+where ``a`` is the antibody concentration, ``[l_i,u_i]`` are the intervals in the `grid` and ``\lambda_e`` is the offset (if `offset != nothing`).
 """
 function langmuir_inv_const_model(grid::AdaptiveDensityApproximation.OneDimGrid ; offset::Union{Nothing,R} = nothing) where R <: Real
 	density_grid_tests(grid)
@@ -316,7 +316,11 @@ Data type to store dose-response result data (e.g. from a dose-response-curve fi
 
 **Model constructor**
 
-	DoseResponseResult(grid::OneDimGrid,concentrations; offset::Real = 0,model::Function = accumulation_model)
+	DoseResponseResult(grid::OneDimGrid,concentrations; 
+		offset::Real = 0,
+		model::Function = accumulation_model
+	)
+
 Calculate a dose-response curve from a K_τ `grid` and a `model` for given `concentrations`. The `offset` value is a global additive shift for all response values.
 
 The available model functions are [`accumulation_model`](@ref), [`accumulation_inv_const_model`](@ref), [`langmuir_model`](@ref) and [`langmuir_inv_const_model`](@ref).

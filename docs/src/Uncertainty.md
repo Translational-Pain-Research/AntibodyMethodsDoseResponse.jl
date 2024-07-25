@@ -1,6 +1,6 @@
 # Uncertainty estimation
 
-The posterior and log-posterior objectives (as used in the [Fitting tutorial](@ref fitting)) from the [FittingObjectiveFunctions](@ref FittingObjectiveFunctions) package belong to a Bayesian data analysis approach. In this analysis regime, it is important to consider not only the best fit but also less probable parameters to estimate the uncertainty of the fit result.
+The posterior and log-posterior objectives (as used in the [Fitting tutorial](@ref fitting)) from [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/) belong to a Bayesian data analysis approach. In this analysis regime, it is important to consider not only the best fit but also less probable parameters to estimate the uncertainty of the fit result.
 
 ## [`EpitopeUncertainty`](@ref) - construction
 
@@ -27,9 +27,9 @@ bins, ranges = peak_detection(adaptive_result.grid, 0.01)
 	For plotting purposes ([`bin_analysis_plot`](@ref), [`peak_analysis_plot`](@ref)), the bins need to specify the grid-domain ranges, e.g. `[[1e-10,1e-8],[1e-5,1e-3]]`. For the uncertainty estimation and uncertainty plotting ([`uncertainty_plot`](@ref)), the bins need to specify the grid intervals that are varied, e.g. `[[1,2,3],[5,8]]`.
 
 !!! tip
-	Defining grid-domain ranges is often easier than figuring out which gird intervals belong to these ranges. The [`select_indices`](@ref) function allows to pick the interval indices belonging to a gird-domain range.
+	Defining grid-domain ranges is often easier than figuring out which gird intervals belong to those ranges. The [`select_indices`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.select_indices) function allows to pick the interval indices belonging to a gird-domain range.
 
-Having defined the interval groups, the uncertainty can be estimated by fixing all parameters to the fit result, shifting uniformly only the parameters belonging to the current group of interest. This process is then repeated for all interval groups. Evaluating the objective function for each shift allows to estimate the uncertainty of the interval group.
+Having defined the interval groups of interest, the uncertainty can be estimated by fixing all parameters to the fit result, shifting uniformly only the parameters belonging to the current group of interest. This process is then repeated for all interval groups. Evaluating the objective function for each shift allows to estimate the uncertainty of the interval group.
 
 ![UncertaintyShift](assets/UncertaintyShift.svg)
 
@@ -55,12 +55,12 @@ Notice the `offset = adaptive_result.optimizer[end]` line. Since the default fit
 
 Finally, the uncertainty levels are specified as fractions of the best objective value.
 
-!!! info "uncertainty estimation from samples"
+!!! info "Uncertainty estimation from samples"
 	There is also an [`EpitopeUncertainty`](@ref) constructor that uses samples, drawn from a posterior or log-posterior objective. However, the sample constructor does not support the selection of bins. Quantiles corresponding to the chosen levels are calculated for each parameter individually. Furthermore, no sample algorithm is provided by the `AntibodyMethods` packages.
 
-## [`EpitopeUncertainty`](@ref) - plotting
+## [[`EpitopeUncertainty`](@ref) - plotting](@id EpitopeUncertainty-plotting)
 
-The `AntibodyMethodsDoseResponseRecipes` package provides a plotting recipe for [`EpitopeUncertainty`](@ref) objects. To define the color-gradient for the uncertainty visualization, the `Colors.jl` package is needed as well. Both packages (and also `Plots.jl`) are automatically exported by the [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience) package. The [`EpitopeUncertainty`](@ref) object `eu` can be plotted by passing the grid `adaptive_result.grid` and the [`EpitopeUncertainty`](@ref) object `eu` to the `plot` function:
+[`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl)provides a plotting recipe for [`EpitopeUncertainty`](@ref) objects. To define the color-gradient for the uncertainty visualization, [`Colors.jl`](https://juliagraphics.github.io/Colors.jl/stable/) is used here. Both packages (and also [`Plots.jl`](https://docs.juliaplots.org/stable/)) are automatically exported by [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl). The [`EpitopeUncertainty`](@ref) object `eu` can be plotted by passing the grid `adaptive_result.grid` and the [`EpitopeUncertainty`](@ref) object `eu` to the `plot` function:
 
 ```@example Uncertainty
 uncertainty_colors =colormap("RdBu", 8)[end:-1:1]
@@ -71,12 +71,12 @@ plot(adaptive_result.grid, eu, xaxis = :log, legend = :topleft,
 	)
 ```
 
-The `colormap` function from `Colors.jl` creates an array of colors (here `8` colors, which matches the number of uncertainty `levels`). The `[end:-1:1]` is used to reverse the colors (now from blue to red). Thus, the lower levels (less certain) are blue while the best result is red.
+The `colormap` function from [`Colors.jl`](https://juliagraphics.github.io/Colors.jl/stable/) creates an array of colors (here `8` colors, which matches the number of uncertainty `levels`). The `[end:-1:1]` is used to reverse the colors (now from blue to red). Thus, the lower levels (less certain) are blue while the best result is red.
 
 #### Keywords with default arguments
 
 * `volume_normalization = :log`: The volume-normalization as discussed in [Background: log-volume normalization](@ref log_volume_normalization).
-* `colors = [:gray]`: An array of colors (that `Plots.jl` accepts for the `color` keyword) that correspond to the different uncertainty levels. If the array contains less colors than uncertainty levels, the last color is repeated for the remaining levels.
+* `colors = [:gray]`: An array of colors (that [`Plots.jl`](https://docs.juliaplots.org/stable/) accepts for the `color` keyword) that correspond to the different uncertainty levels. If the array contains less colors than uncertainty levels, the last color is repeated for the remaining levels.
 * `opacities = [1]`: Array of opacities (number between `0` and `1`) that correspond to the different uncertainty levels. Again, the last opacity is repeated if there are more uncertainty levels than opacities.
 * `reverse = false`: If `true` the plotting order of the uncertainty levels is reversed. Since the uncertainty ranges are plotted on top of each other, this can become necessary when the [`EpitopeUncertainty`](@ref) constructor for samples is used, where larger levels correspond to larger uncertainty (as opposed to the bin-wise shifting constructor). 
 * `hide_labels = true`: If `true` the labels are omitted. Can become necessary when a large number of uncertainty levels is used.
@@ -86,13 +86,13 @@ The `colormap` function from `Colors.jl` creates an array of colors (here `8` co
 !!! warning "Interpretation of the uncertainty"
 	As explained above, the uncertainty is estimated by keeping all bins fixed, only shifting one bin at a time. Thus, the bin uncertainties have to be considered individually. 
 	
-	It is not admissible to combine the uncertainty of the bins: e.g. to consider shifting the first peak up and shifting the second peak down within the `1e-10` uncertainty region and then to declare this to have the uncertainty `1e-10`.
+	It is not admissible to combine the uncertainty of the bins: E.g. to consider shifting the first peak up and shifting the second peak down within the `1e-10` uncertainty region and then to declare this to have the uncertainty `1e-10`.
 
-	It is not admissible to consider partial shifts within a bin: e.g. shifting only the tip of the first peak, but not the other parts of the peak. The uncertainty level is only valid for the uniform shift of all parameters within a bin.
+	It is not admissible to consider partial shifts within a bin: E.g. shifting only the tip of the first peak, but not the other parts of the peak. The uncertainty level is only valid for the uniform shift of all parameters within a bin.
 
 ## [`DoseResponseUncertainty`](@ref) - construction
 
-Given an [`EpitopeUncertainty`](@ref) object and the corresponding grid, a [`DoseResponseUncertainty`](@ref) object can be created. In essence, the dose-response uncertainty is obtained by simulating dose-response curves for the different parameters contained in the [`EpitopeUncertainty`](@ref) object. Hence, the concentrations that these dose-responses are simulated for need to be passed explicitly:
+Given an [`EpitopeUncertainty`](@ref) object and the corresponding grid, a [`DoseResponseUncertainty`](@ref) object can be created. In essence, the dose-response uncertainty is obtained by simulating dose-response curves for the different parameters contained in the [`EpitopeUncertainty`](@ref) object. Hence, the concentrations for which these dose-responses curves are simulated need to be passed explicitly:
 
 ```julia
 concentrations = LogRange(extrema(data.independent)...,100)
@@ -132,7 +132,7 @@ plot!(dr_B,  linestyle = :dashdotdot, color = "Blue Violet", label = "peak 2 var
 ```
 
 
-Furthermore, note that `concentrations` covers the same concentration range as the dose-response data points, but contain much more intermediate concentrations:
+Note that the `concentrations` array covers the same concentration range as the dose-response data points, but contains much more intermediate concentrations:
 ```@example Uncertainty
 println(data.independent)
 println(concentrations)
@@ -141,9 +141,9 @@ println(concentrations)
 !!! tip
 	Using more intermediate concentrations is recommended to avoid jagged lines.
 
-## [`DoseResponseUncertainty`](@ref) - plotting
+## [[`DoseResponseUncertainty`](@ref) - plotting](@id DoseResponseUncertainty-plotting)
 
-As before, `AntibodyMethodsDoseResponseRecipes` provides a plotting recipe for [`DoseResponseUncertainty`](@ref) objects:
+As before, [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) provides a plotting recipe for [`DoseResponseUncertainty`](@ref) objects:
 
 ```@example Uncertainty
 plot(du, xaxis = :log, legend = :topleft, colors = uncertainty_colors, hide_labels = false)
@@ -153,13 +153,13 @@ scatter!(data, color = "Dark Orange", label = "data") # compare uncertainty with
 #### Keywords with default arguments
 
 * `filter_zeros = [true, false]`: Remove zero-values from the plot (works the same as explained in [Measurement data - Plotting](@ref measurement_data_plotting)).
-* `colors = [:gray]`: Same as [`EpitopeUncertainty`](@ref) plotting above
-* `opacities = [1]`: Same as [`EpitopeUncertainty`](@ref) plotting above
-* `reverse = false`: Same as [`EpitopeUncertainty`](@ref) plotting above
-* `hide_labels = true`: Same as [`EpitopeUncertainty`](@ref) plotting above
+* `colors = [:gray]`: Same as [`EpitopeUncertainty`](@ref) plotting above.
+* `opacities = [1]`: Same as [`EpitopeUncertainty`](@ref) plotting above.
+* `reverse = false`: Same as [`EpitopeUncertainty`](@ref) plotting above.
+* `hide_labels = true`: Same as [`EpitopeUncertainty`](@ref) plotting above.
 
 !!! warning "Interpretation of the uncertainty"
-	As explained above, the uncertainty is estimated by keeping all bins fixed, only using the uncertainty estimation of one bin at a time. Then, the dose-response curves are simulated. For each concentration, the maximal/minimal value is estimated for all bins.  Thus, comparing the dose-response uncertainty with the uncertainty of an individual peak is not directly possible. It rather shows the worst-case uncertainty if any of the peaks (but only one) would be shifted within a certain uncertainty level.
+	As explained above, the uncertainty is estimated by keeping all bins fixed, only using the uncertainty estimation of one bin at a time. Then, the dose-response curves are simulated for all individual bin uncertainties. Finally, for each concentration the maximal/minimal response value is collected by considering all individual bin uncertainties.  Thus, comparing the dose-response uncertainty with the uncertainty of an individual peak is not directly possible. It rather shows the worst-case uncertainty if any of the peaks (but only one) would be shifted within a certain uncertainty level.
 	
 	Nevertheless, it is possible to gauge the uncertainty effect of a single peak, by considering only the concentration region of the dose-response curve that matches the ``K_\tau`` region of the peak.
 
@@ -173,7 +173,7 @@ scatter!(data, color = "Dark Orange", label = "data") # compare uncertainty with
 
 ## Plotting with [`uncertainty_plot`](@ref)
 
-Since the uncertainty estimation involves various subtleties, it is not discussed in the [quick start guide](@ref quick_start). However, the [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience) package contains a convenience function ([`uncertainty_plot`](@ref)) to create the uncertainty plots with. The available methods to customize the plots are discussed in [quick start: plotting options](@ref plotting_options).
+Since the uncertainty estimation involves various subtleties, it is not discussed in the [quick start guide](@ref quick_start). However, [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) contains a convenience function ([`uncertainty_plot`](@ref)) to create the uncertainty plots. The available methods to customize the plots are discussed in [quick start: plotting options](@ref plotting_options).
 
 
 The plots from above can be recreated with [`uncertainty_plot`](@ref):
@@ -199,7 +199,7 @@ scatter!(data, color = "Dark Orange", label = "data") # plot data points on top
 
 ## Rescale the bin-wise shifts
 
-By default (`volume_normalization = :none`), all weights within the same bin are shifted uniformly. However, the corresponding intervals may have different lengths. And the contribution of an interval is given by the product `weight × interval length`. Hence, scaling the wight shifts according to their corresponding interval length provides a further uncertainty estimation from bin-wise weight shifting. For this, the `volume_normalization = :linear` keyword can be used in the [`EpitopeUncertainty`](@ref) constructor, leading to
+By default (`volume_normalization = :none`), all weights within the same bin are shifted uniformly. However, the corresponding intervals may have different lengths. And the contribution of an interval is given by the product `weight × interval length`. Hence, scaling the wight shifts according to their corresponding interval length provides further uncertainty estimation methods from bin-wise weight shifting. For this, the `volume_normalization = :linear` keyword can be used in the [`EpitopeUncertainty`](@ref) constructor, leading to
 
 ```@example Uncertainty
 eu = deserialize("examples/uncertainty_volume/eu.jld") # hide
@@ -212,7 +212,7 @@ scatter!(data, color = "Dark Orange", label = "data") # hide
 
 plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
 ```
-Observe that the shifts become larger for larger `K_\tau` values. Although the intervals appear to have the same lengths, the intervals further right in the plot are larger, because of the logarithmic plot. Hence, the shifts, when scaled by the interval length, become larger. Note that this behavior is universal, i.e. not necessarily depending on the uncertainty itself but on the fact of the unequal size of intervals of a logarithmic scale.
+Observe that the shifts become larger for larger ``K_\tau`` values. Although the intervals appear to have the same lengths, the intervals further right in the plot are larger, because of the logarithmic plot. Hence, the shifts, when scaled by the interval length, become larger. Note that this behavior is universal, i.e. not necessarily depending on the uncertainty itself but on the fact of the unequal size of logarithmically sized intervals.
 
 
 As mentioned in [Background: log-volume normalization](@ref log_volume_normalization), it is in fact the visual area of the intervals in the logarithmic plot that corresponds to the dose-response effect of the interval. Thus, scaling the shifts with the visual lengths of the intervals, as they appear in a logarithmic plot, is another approach to investigate the uncertainty with bin-wise weight shifting. This can be achieved by `volume_normalization = :log`:
@@ -228,11 +228,11 @@ scatter!(data, color = "Dark Orange", label = "data") # hide
 
 plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
 ```
-Since the intervals have the about the same length in the logarithmic plot, the shifts are almost identical (for the respective bin).
+Since the intervals have almost the same length in the logarithmic plot, the shifts are almost identical (for the respective bin).
 
 
 !!! info
-	In summary, the different re-scalings of the shifts provide additional methods to investigate the uncertainty differently. Since bin-wise shifts only approximate the uncertainty roughly (as sampling is computationally expensive), different scalings reveal different aspects of the uncertainty, by testing different configuration of deviation from the best fit. Hence, no scaling is superior to the others, they just answer slightly different questions about the uncertainty.
+	In summary, the different re-scalings of the shifts provide additional methods to investigate the uncertainty. Since bin-wise shifts only approximate the uncertainty roughly (as sampling is computationally expensive), different scalings reveal different aspects of the uncertainty, by testing different configuration of deviations from the best fit. Hence, no scaling is superior to the others, they just answer slightly different questions about the uncertainty.
 
 
 
@@ -390,7 +390,7 @@ plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
 
 ## [Example: Total uncertainty](@id total_uncertainty)
 
-So far, the same `bins` were used for both the [`EpitopeUncertainty`](@ref) and the [`DoseResponseUncertainty`](@ref). But, this is not a requirement. It is possible to combine different bins to obtain different uncertainty visualizations. For example, this allows to estimate the total uncertainty. For this, the uncertainties of the individual parameters of the ``K_\tau`` density are estimated as in [Example: Individual uncertainty](@ref individual_uncertainty):
+So far, the same `bins` were used for both the [`EpitopeUncertainty`](@ref) and the [`DoseResponseUncertainty`](@ref). But, this is not a requirement. It is possible to combine different bins to obtain different uncertainty visualizations. For example, this allows to estimate the total uncertainty of the dose-response curve. For this, the uncertainties of the individual parameters of the ``K_\tau`` density are estimated as in [Example: Individual uncertainty](@ref individual_uncertainty):
 
 ```@example Uncertainty
 epitope_bins = collect(1:length(adaptive_result.grid))
