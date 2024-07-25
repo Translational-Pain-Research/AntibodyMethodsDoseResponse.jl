@@ -210,7 +210,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 Observe that the shifts become larger for larger ``K_\tau`` values. Although the intervals appear to have the same lengths, the intervals further right in the plot are larger, because of the logarithmic plot. Hence, the shifts, when scaled by the interval length, become larger. Note that this behavior is universal, i.e. not necessarily depending on the uncertainty itself but on the fact of the unequal size of logarithmically sized intervals.
 
@@ -226,7 +226,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 Since the intervals have almost the same length in the logarithmic plot, the shifts are almost identical (for the respective bin).
 
@@ -278,7 +278,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 
 
@@ -311,7 +311,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 
 
@@ -348,7 +348,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 
 
@@ -379,7 +379,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 
 !!! info "Interpretation"
@@ -429,7 +429,7 @@ du_plot, eu_plot = uncertainty_plot(eu,du,adaptive_result.grid, eu_arguments = e
 du_plot = plot(du_plot) # hide
 scatter!(data, color = "Dark Orange", label = "data") # hide
 
-plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 3mm) # hide
+plot(eu_plot, du_plot, layout = (1,2), size = (800,300), margins = 5mm) # hide
 ```
 
 	
