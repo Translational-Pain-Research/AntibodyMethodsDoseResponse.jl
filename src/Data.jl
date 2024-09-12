@@ -34,7 +34,7 @@ end
 
 """
 	dose_response_check(fitting_data::FittingData)
-Test if the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` satisfies properties for dose-response data:
+Test if the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` satisfies properties for dose-response data:
 
 * only real numbers
 * numbers must be positive
@@ -51,7 +51,7 @@ end
 
 """
 	normalize_data!(fitting_data::FittingData; offset::Real = 0, reference::Union{Nothing,Real} = nothing)
-Normalize the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` by mutation.
+Normalize the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` by mutation.
 
 * `reference = nothing`: The reference signal to normalize the responses to. If `reference = nothing`, the maximal response is used a reference point.
 * `offset = 0`: Signal offset to be subtracted (applies to both the responses and the reference point).
@@ -116,7 +116,7 @@ end
 
 """
 	normalize_data!(fitting_data::FittingData; offset::Real = 0, reference::Union{Nothing,Real} = nothing)
-Return the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` with normalized response data and errors.
+Return the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` with normalized response data and errors.
 
 * `reference = nothing`: The reference signal to normalize the responses to. If `reference = nothing`, the maximal response is used a reference point.
 * `offset = 0`: Signal offset to be subtracted (applies to both the responses and the reference point).
@@ -214,7 +214,7 @@ end
 
 """
 	simple_depletion_correction(fitting_data::FittingData,scale::Real)
-Return the depletion-corrected [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object.
+Return the depletion-corrected [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object.
 
 The concentrations are corrected to `concentration - scale * response`.
 """
@@ -227,7 +227,7 @@ end
 
 """
 	simple_depletion_correction(fitting_data::FittingData)
-Return depletion-corrected [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object using the largest possible scale factor.
+Return depletion-corrected [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object using the largest possible scale factor.
 
 The concentrations are corrected to `concentration - scale * response`.
 """
@@ -243,7 +243,7 @@ end
 
 """
 	simple_depletion_correction!(fitting_data::FittingData,scale::Real)
-Depletion-correct the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` by mutation.
+Depletion-correct the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` by mutation.
 
 The concentrations are corrected to `concentration - scale * response`.
 """
@@ -258,7 +258,7 @@ end
 
 """
 	simple_depletion_correction!(fitting_data::FittingData)
-Depletion-correct the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` by mutation, using the largest possible scale factor.
+Depletion-correct the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object `fitting_data` by mutation, using the largest possible scale factor.
 
 The concentrations are corrected to `concentration - scale * response`.
 """

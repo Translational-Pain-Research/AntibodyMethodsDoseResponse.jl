@@ -1,6 +1,6 @@
 # [Fitting](@id fitting)
 
-The model generators return a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object. The `model` field of a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object is a pure Julia function, allowing to implement the model fitting from scratch.
+The model generators return a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object. The `model` field of a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object is a pure Julia function, allowing to implement the model fitting from scratch.
 
 ```@example Fitting
 using AntibodyMethodsDoseResponseConvenience
@@ -9,10 +9,10 @@ typeof(model.model) <: Function
 ```
 
 
-Yet, since the model generators create a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object, it is convenient to construct the fitting objective with [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/). Then, only the minimization/maximization of the objective function remains to be implemented. Because these steps are always the same, the [`adaptive_dose_response_fit`](@ref) function summarizes the creation of the model function and the objective function, requiring only the implementation of a function minimizer.
+Yet, since the model generators create a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object, it is convenient to construct the fitting objective with [`FittingObjectiveFunctions.jl`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/). Then, only the minimization/maximization of the objective function remains to be implemented. Because these steps are always the same, the [`adaptive_dose_response_fit`](@ref) function summarizes the creation of the model function and the objective function, requiring only the implementation of a function minimizer.
 
 !!! tip "Reminder: Convenience workflow"
-	If there is no reason to avoid the dependencies of [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl), the workflow as described in the [quick start guide](@ref quick_start) should be used. [`FittingCondition`](@ref) and [`fit_condition`](@ref) expose the same options that are described here.
+	If there is no reason to avoid the dependencies of [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl), the workflow as described in the [quick start guide](@ref quick_start) should be used. [`FittingCondition`](@ref) and [`fit_condition`](@ref) expose the same options that are described here.
 
 ## The setting
 
@@ -27,7 +27,7 @@ scatter(concentrations,responses, yerror = errors, xaxis = :log, legend = :none)
 
 ## Simple model fitting
  
- The data needs to be summarized in a [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object, as described in [Models](@ref binding_models):
+ The data needs to be summarized in a [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object, as described in [Models](@ref binding_models):
 
 ```@example Fitting
 data = FittingData(concentrations, responses, errors)
@@ -80,7 +80,7 @@ plot(DensityPlot(result.grid), xaxis = :log, color = 2, fill = 0,
 
 ## [Adaptive model fitting](@id adaptive_model_fitting)
 
-The model fit above can be improved in two areas. First, a regularization could be used. Second, the adaptive density approximation from [`AdaptiveDensityApproximation.jl`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/) could be used to reduce the number of parameters. Here, we recreate the default optimization from the [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) package as described in the [quick start guide](@ref quick_start) to illustrate some of the available options.
+The model fit above can be improved in two areas. First, a regularization could be used. Second, the adaptive density approximation from [`AdaptiveDensityApproximation.jl`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/) could be used to reduce the number of parameters. Here, we recreate the default optimization from the [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl) package as described in the [quick start guide](@ref quick_start) to illustrate some of the available options.
 
 ### Setting up the objective function properties
 
@@ -88,7 +88,7 @@ For the regularization, a log-posterior objective can be used, where a smoothing
 
 Log-posterior objectives differ from posterior objectives only by taking the logarithm of all functions. Mathematically, there is no difference, but for the computation of tiny probabilities, taking the logarithm upfront is numerically beneficial. Accordingly, the prior also needs to be defined as log-prior, i.e. as the logarithm of the prior.
 
- While [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/) expects standard functions as prior/log-prior, [`adaptive_dose_response_fit`](@ref) requires a prior-generating function (Here, the `500` is used to reproduce the `scale = 500` from the [quick start guide](@ref quick_start)):
+ While [`FittingObjectiveFunctions.jl`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/) expects standard functions as prior/log-prior, [`adaptive_dose_response_fit`](@ref) requires a prior-generating function (Here, the `500` is used to reproduce the `scale = 500` from the [quick start guide](@ref quick_start)):
 
 ```@example Fitting
 function log_prior_generator(centers, volumes, offset)
@@ -230,7 +230,7 @@ errors = data.errors # hide
 log_prior_generator = scaled_log_volume_prior(500)
 ```
 
-The [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object is created as before.
+The [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object is created as before.
 
 ```@example FittingConvenience
 data = FittingData(concentrations,responses, errors, distributions = (y,m,Δy)-> -(y-m)^2/Δy^2)
@@ -302,7 +302,7 @@ fit_conditions(conditions)
 ## Changing the initial values
 
 
-In each case discussed here, no initial parameter values were set for the model fitting. This is, because the wights of the gird are used as initial values. By default, [`create_grid`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.create_grid) sets all weights to `1`:
+In each case discussed here, no initial parameter values were set for the model fitting. This is, because the wights of the gird are used as initial values. By default, [`create_grid`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.create_grid) sets all weights to `1`:
 
 ```@example FittingConvenience
 grid = create_grid(LogRange(1e-10,1e-2,3)) 

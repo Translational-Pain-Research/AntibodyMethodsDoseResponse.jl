@@ -1,7 +1,7 @@
 name = "AntibodyMethodsDoseResponse"
 uuid = "69c61766-33fa-4661-b145-6c090ebe636b"
 authors = ["Dominik Tschimmel <dominik.tschimmel.contact@gmail.com> and contributors"]
-version = "0.2.4"
+version = "0.2.5"
 
 [deps]
 AdaptiveDensityApproximation = "56a9bb0d-c37d-45c9-8e6c-6c1c1baae5c6"

@@ -2,7 +2,7 @@
 
 ## About
 
-[`AntibodyMethodsDoseResponse.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponse.jl), [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) and [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) are [Julia](https://julialang.org/) packages for the analysis of (antibody-binding) dose-response curves.
+[`AntibodyMethodsDoseResponse.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponse.jl), [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl) and [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl) are [Julia](https://julialang.org/) packages for the analysis of (antibody-binding) dose-response curves.
 
 In essence, the dose-response data is modelled by the following accumulation model (see [https://arxiv.org/abs/2407.06052](https://arxiv.org/abs/2407.06052) for further details and applications):
 ```math
@@ -22,9 +22,9 @@ In this documentation, both the terms **density plot** and **histogram** will be
 !!! info "The different packages"
     | Package | Short Description |
     | :------ | :-------- |
-    | [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) | Convenience package for the analysis of dose-response curves. Contains predefined analysis and plotting methods. Recommended for the analysis of dose-response data. |
-    | [`AntibodyMethodsDoseResponse.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponse.jl) | Minimal package defining the underlying models and methods for the analysis of dose-response curves. Intended for the development of analysis methods from scratch. Requires fewer dependencies. |
-    | [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) |  [`Plots.jl`](https://docs.juliaplots.org/stable/) recipes for `AntibodyMethodsDoseResponse` objects. |
+    | [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl) | Convenience package for the analysis of dose-response curves. Contains predefined analysis and plotting methods. Recommended for the analysis of dose-response data. |
+    | [`AntibodyMethodsDoseResponse.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponse.jl) | Minimal package defining the underlying models and methods for the analysis of dose-response curves. Intended for the development of analysis methods from scratch. Requires fewer dependencies. |
+    | [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl) |  [`Plots.jl`](https://docs.juliaplots.org/stable/) recipes for `AntibodyMethodsDoseResponse` objects. |
 
 
 
@@ -43,15 +43,15 @@ In this documentation, both the terms **density plot** and **histogram** will be
 
 ## Installation
 
-First, add the registry `AntibodyPackagesRegistry`:
+First, add the registry `Translational-Pain-ResearchRegistry`:
 
 ```julia
 using Pkg
 Pkg.Registry.add()
-Pkg.Registry.add(RegistrySpec(url = "https://github.com/AntibodyPackages/AntibodyPackagesRegistry"))
+Pkg.Registry.add(RegistrySpec(url = "https://github.com/Translational-Pain-Research/Translational-Pain-ResearchRegistry"))
 ```
 
-Then, the packages can be installed as usual. E.g. [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl), which installs all necessary dependencies for the analysis of dose-response curves:
+Then, the packages can be installed as usual. E.g. [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl), which installs all necessary dependencies for the analysis of dose-response curves:
 
 ```julia
 using Pkg

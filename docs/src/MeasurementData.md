@@ -1,6 +1,6 @@
 # Measurement data
 
-To work with measurement data, it needs to be stored in a [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object from [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/).
+To work with measurement data, it needs to be stored in a [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object from [`FittingObjectiveFunctions.jl`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/).
 
 ```julia
 using FittingObjectiveFunctions
@@ -25,7 +25,7 @@ nothing #hide
 dose_response_check(FittingData([1,2],[-1,2]))
 ```
 
-If [`dose_response_check`](@ref) does not throw an error, the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object contains proper dose-response data.
+If [`dose_response_check`](@ref) does not throw an error, the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object contains proper dose-response data.
 
 !!! info
 	[`dose_response_check`](@ref) is used internally by some functions to ensure proper data transformation. E.g. data normalization or depletion corrections require proper dose-response data.
@@ -81,7 +81,7 @@ println("The offset value must be smaller than the reference value.") #hide
 ```
 
 !!! tip "Mutation of data"
-	[`normalize_data`](@ref) does not mutate the original [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object, but returns a normalized copy. To mutate the original object, use [`normalize_data!`](@ref).
+	[`normalize_data`](@ref) does not mutate the original [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object, but returns a normalized copy. To mutate the original object, use [`normalize_data!`](@ref).
 
 
 ## Simple depletion correction
@@ -109,18 +109,18 @@ To obtain the lower-bound concentrations ``b_i``, the [`simple_depletion_correct
 simple_depletion_correction(FittingData([1,2,3],[1,1.5,1.9]), β)
 ```
 
-Note that a new [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object is returned, containing the lower-bound concentrations `b_i` instead of the initial concentrations `a_i`. It is possible to use different scales for [`simple_depletion_correction`](@ref). But for the [`scale_bound`](@ref) there is a shortcut (which internally calls [`scale_bound`](@ref)):
+Note that a new [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object is returned, containing the lower-bound concentrations `b_i` instead of the initial concentrations `a_i`. It is possible to use different scales for [`simple_depletion_correction`](@ref). But for the [`scale_bound`](@ref) there is a shortcut (which internally calls [`scale_bound`](@ref)):
 
 ```@example MeasurementData
 simple_depletion_correction(FittingData([1,2,3],[1,1.5,1.9]))
 ```
 
 !!! tip "Mutation of data"
-	Again, [`simple_depletion_correction`](@ref) does not mutate the original [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object, but returns a corrected copy. To mutate the original object, use [`simple_depletion_correction!`](@ref).
+	Again, [`simple_depletion_correction`](@ref) does not mutate the original [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object, but returns a corrected copy. To mutate the original object, use [`simple_depletion_correction!`](@ref).
 
 ## [Plotting](@id measurement_data_plotting)
 
-Of course, [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects can be plotted with any plotting library by calling the fields:
+Of course, [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects can be plotted with any plotting library by calling the fields:
 
 ```@example MeasurementData
 using Plots
@@ -128,7 +128,7 @@ data = FittingData([0,1,2,3,4],[0,1,1.5,1.9,2.1])
 plot(data.independent, data.dependent, yerrors = data.errors)
 ```
 
-For convenience, [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) contains plotting recipes for [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects:
+For convenience, [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl) contains plotting recipes for [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects:
 
 ```@example MeasurementData
 using Plots, AntibodyMethodsDoseResponseRecipes
@@ -139,16 +139,16 @@ plot(data)
 Observe that the data point with `concentration = 0` is missing. Since dose-response curves are commonly plotted in a logarithmic scale and since [`Plots.jl`](https://docs.juliaplots.org/stable/) does not automatically remove zero values from logarithmic plots (which become ``-\infty``), the plotting recipe introduces the keyword `filter_zeros = [true,false]`. The `filter_zeros` keyword expects two `Bool` values. If the first value is `true`, all data points with `concentration = 0` are removed from the plot. Accordingly, if the second value is `true`, all data points with `response = 0` are removed from the plot.
 
 
-The plotting recipe defines how [`Plots.jl`](https://docs.juliaplots.org/stable/) handles the data inside a [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object. Thus, the usual keywords remain usable and can be combined with the `filter_zeros` keyword:
+The plotting recipe defines how [`Plots.jl`](https://docs.juliaplots.org/stable/) handles the data inside a [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object. Thus, the usual keywords remain usable and can be combined with the `filter_zeros` keyword:
 ```@example MeasurementData
 plot(data, color = :red, filter_zeros = [false,false])
 ```
 
-## [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) and [`FittingCondition`](@ref)
+## [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) and [`FittingCondition`](@ref)
 
-Internally [`FittingCondition`](@ref) objects expect measurement data to be stored in [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects. Yet, the [quick start guide](@ref quick_start) mentions [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects only as optional method to implement specific measurement errors. This is, because [`FittingCondition`](@ref) offers constructors that automatically create the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects.
+Internally [`FittingCondition`](@ref) objects expect measurement data to be stored in [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects. Yet, the [quick start guide](@ref quick_start) mentions [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects only as optional method to implement specific measurement errors. This is, because [`FittingCondition`](@ref) offers constructors that automatically create the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects.
 
-The default constructor uses [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects:
+The default constructor uses [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects:
 
 ```@example MeasurementData
 data = FittingData([1,2,3],[1,1.5,1.9], [0.4,0.4,0.4], distributions = (y,m,Δy)-> -abs(y-m))
@@ -156,9 +156,9 @@ condition = FittingCondition(data)
 condition.data 
 ```
 
-Using the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) constructor allows to specify different measurement errors, as mentioned in the tip, but also different uncertainty distributions for posterior based objectives.
+Using the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) constructor allows to specify different measurement errors, as mentioned in the tip, but also different uncertainty distributions for posterior based objectives.
 
-The convenience constructor bypasses the need to construct the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) explicitly, expecting only the concentrations and the responses:
+The convenience constructor bypasses the need to construct the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) explicitly, expecting only the concentrations and the responses:
 
 ```@example MeasurementData
 condition = FittingCondition([1,2,3],[1,1.5,1.9])

@@ -53,9 +53,9 @@ end
 	accumulation_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope accumulation model. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
 
 **Model function**
 
@@ -102,9 +102,9 @@ end
 	accumulation_inv_const_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope accumulation model with `1/K_τ = k_a * τ` as constant domain. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
 
 **Model function**
 
@@ -164,9 +164,9 @@ end
 	langmuir_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope Langmuir model. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all).
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all).
 
 
 **Model function**
@@ -217,9 +217,9 @@ end
 	langmuir_inv_const_model(grid::OneDimGrid; offset = nothing)
 Create a multi-epitope Langmuir model with `1/K_d = k_a / k_d` as constant domain. Returns `(model,λ,centers,volumes)` where 
 
-* `model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
+* `model` is a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object.
 * `λ` is an initial parameter array (the weights of the grid and the offset if `offset != nothing`). If `offset != nothing`, the last element is the offset parameter `λ[end] = offset`.
-* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
+* `centers` and `volumes` are the remaining properties of the grid, see [`export_all`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.export_all)
 
 **Model function**
 

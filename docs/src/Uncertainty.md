@@ -1,6 +1,6 @@
 # Uncertainty estimation
 
-The posterior and log-posterior objectives (as used in the [Fitting tutorial](@ref fitting)) from [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/) belong to a Bayesian data analysis approach. In this analysis regime, it is important to consider not only the best fit but also less probable parameters to estimate the uncertainty of the fit result.
+The posterior and log-posterior objectives (as used in the [Fitting tutorial](@ref fitting)) from [`FittingObjectiveFunctions.jl`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/) belong to a Bayesian data analysis approach. In this analysis regime, it is important to consider not only the best fit but also less probable parameters to estimate the uncertainty of the fit result.
 
 ## [`EpitopeUncertainty`](@ref) - construction
 
@@ -27,7 +27,7 @@ bins, ranges = peak_detection(adaptive_result.grid, 0.01)
 	For plotting purposes ([`bin_analysis_plot`](@ref), [`peak_analysis_plot`](@ref)), the bins need to specify the grid-domain ranges, e.g. `[[1e-10,1e-8],[1e-5,1e-3]]`. For the uncertainty estimation and uncertainty plotting ([`uncertainty_plot`](@ref)), the bins need to specify the grid intervals that are varied, e.g. `[[1,2,3],[5,8]]`.
 
 !!! tip
-	Defining grid-domain ranges is often easier than figuring out which gird intervals belong to those ranges. The [`select_indices`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.select_indices) function allows to pick the interval indices belonging to a gird-domain range.
+	Defining grid-domain ranges is often easier than figuring out which gird intervals belong to those ranges. The [`select_indices`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.select_indices) function allows to pick the interval indices belonging to a gird-domain range.
 
 Having defined the interval groups of interest, the uncertainty can be estimated by fixing all parameters to the fit result, shifting uniformly only the parameters belonging to the current group of interest. This process is then repeated for all interval groups. Evaluating the objective function for each shift allows to estimate the uncertainty of the interval group.
 
@@ -60,7 +60,7 @@ Finally, the uncertainty levels are specified as fractions of the best objective
 
 ## [[`EpitopeUncertainty`](@ref) - plotting](@id EpitopeUncertainty-plotting)
 
-[`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl)provides a plotting recipe for [`EpitopeUncertainty`](@ref) objects. To define the color-gradient for the uncertainty visualization, [`Colors.jl`](https://juliagraphics.github.io/Colors.jl/stable/) is used here. Both packages (and also [`Plots.jl`](https://docs.juliaplots.org/stable/)) are automatically exported by [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl). The [`EpitopeUncertainty`](@ref) object `eu` can be plotted by passing the grid `adaptive_result.grid` and the [`EpitopeUncertainty`](@ref) object `eu` to the `plot` function:
+[`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl)provides a plotting recipe for [`EpitopeUncertainty`](@ref) objects. To define the color-gradient for the uncertainty visualization, [`Colors.jl`](https://juliagraphics.github.io/Colors.jl/stable/) is used here. Both packages (and also [`Plots.jl`](https://docs.juliaplots.org/stable/)) are automatically exported by [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl). The [`EpitopeUncertainty`](@ref) object `eu` can be plotted by passing the grid `adaptive_result.grid` and the [`EpitopeUncertainty`](@ref) object `eu` to the `plot` function:
 
 ```@example Uncertainty
 uncertainty_colors =colormap("RdBu", 8)[end:-1:1]
@@ -143,7 +143,7 @@ println(concentrations)
 
 ## [[`DoseResponseUncertainty`](@ref) - plotting](@id DoseResponseUncertainty-plotting)
 
-As before, [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) provides a plotting recipe for [`DoseResponseUncertainty`](@ref) objects:
+As before, [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl) provides a plotting recipe for [`DoseResponseUncertainty`](@ref) objects:
 
 ```@example Uncertainty
 plot(du, xaxis = :log, legend = :topleft, colors = uncertainty_colors, hide_labels = false)
@@ -173,7 +173,7 @@ scatter!(data, color = "Dark Orange", label = "data") # compare uncertainty with
 
 ## Plotting with [`uncertainty_plot`](@ref)
 
-Since the uncertainty estimation involves various subtleties, it is not discussed in the [quick start guide](@ref quick_start). However, [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) contains a convenience function ([`uncertainty_plot`](@ref)) to create the uncertainty plots. The available methods to customize the plots are discussed in [quick start: plotting options](@ref plotting_options).
+Since the uncertainty estimation involves various subtleties, it is not discussed in the [quick start guide](@ref quick_start). However, [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl) contains a convenience function ([`uncertainty_plot`](@ref)) to create the uncertainty plots. The available methods to customize the plots are discussed in [quick start: plotting options](@ref plotting_options).
 
 
 The plots from above can be recreated with [`uncertainty_plot`](@ref):

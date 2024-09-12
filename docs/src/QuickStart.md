@@ -1,10 +1,10 @@
 # [Quick start](@id quick_start)
 
-The most convenient and recommended way to analyze dose-response data is to use [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl). This tutorial will not cover all details (e.g. the internal procedure), but will present a short introduction of the basics. To see all details and available options, please have a look at the [AnitbodyMethodsDoseResponseConvenience API](@ref api_convenience).
+The most convenient and recommended way to analyze dose-response data is to use [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl). This tutorial will not cover all details (e.g. the internal procedure), but will present a short introduction of the basics. To see all details and available options, please have a look at the [AnitbodyMethodsDoseResponseConvenience API](@ref api_convenience).
 
 ## Starting point
 
-Suppose, a dose-response experiment with 3 replicates was conducted, leading to the following dose-response curves:
+Suppose, a dose-response experiment with 3 replicates was conducted (of course, any number of replicates can be used and will work in the same way), leading to the following dose-response curves:
 
 ```@example QuickStart
 using AntibodyMethodsDoseResponseConvenience, Measures # hide
@@ -15,9 +15,10 @@ scatter!(data.independent, replicates[2].dependent, xaxis = :log, label = "repli
 scatter!(data.independent, replicates[3].dependent, xaxis = :log, label = "replicate 3", markershape = :utriangle) # hide
 ```
 
+
 ## Loading Data
 
-Importing general data into Julia is not the scope of the [`AntibodyMethods`](https://github.com/AntibodyPackages) packages. For this, use e.g. [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) or [`CSV.jl`](https://csv.juliadata.org/stable/) in conjunction with [`DataFrames.jl`](https://dataframes.juliadata.org/stable/). Nevertheless, as short introduction, assume that the data is stored in a csv file, where the columns are (concentrations, replicate 1, ..., replicate 3). Using [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) the data can be imported as follows:
+Importing general data into Julia is not the scope of the [`AntibodyMethods`](https://github.com/Translational-Pain-Research) packages. For this, use e.g. [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) or [`CSV.jl`](https://csv.juliadata.org/stable/) in conjunction with [`DataFrames.jl`](https://dataframes.juliadata.org/stable/). Nevertheless, as short introduction, assume that the data is stored in a csv file, where the columns are (concentrations, replicate 1, ..., replicate 3). Using [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) the data can be imported as follows:
 
 
 ```julia
@@ -60,7 +61,7 @@ nothing # hide
 	Since curve-fitting can be a time-consuming process, it is recommended to save the results into files. This allows to re-plot the results at a later time, without having to re-run the fitting process. The `path` keyword defines the directory for the result files. If `path=""`, which is the default option, no files are saved.
 
 !!! tip "Different measurement errors"
-	Constructing a [`FittingCondition`](@ref) object by passing the different replicate responses will default to the standard deviation of the data points for the measurement error. If only a single response is used, the replicates field will be empty (`nothing`) and the measurement errors are set to `±1`. Different errors can be used by constructing the [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object manually:
+	Constructing a [`FittingCondition`](@ref) object by passing the different replicate responses will default to the standard deviation of the data points for the measurement error. If only a single response is used, the replicates field will be empty (`nothing`) and the measurement errors are set to `±1`. Different errors can be used by constructing the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object manually:
 	```julia
 	errors = 0.1 .* responses
 	data = FittingData(concentrations,responses, errors)
@@ -96,7 +97,7 @@ results, data, replicates = load_results("path_to_stored_results")
 This allows to re-plot the results at a later time, without the need to re-run the analysis.
 
 !!! warning
-	The `results`, `data` and `replicates` are saved with `Serialization.jl`. Loading objects into a new instance of Julia does not re-instantiate referenced functions. In other words, the distribution functions of loaded [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects do not work. Hence, loaded [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects cannot be used for fitting. Instead, one should define new [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects from scratch:
+	The `results`, `data` and `replicates` are saved with `Serialization.jl`. Loading objects into a new instance of Julia does not re-instantiate referenced functions. In other words, the distribution functions of loaded [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects do not work. Hence, loaded [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects cannot be used for fitting. Instead, one should define new [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) objects from scratch:
 
 		new_data = FittingData(data.independent, data.dependent, data.errors, distributions = ....)
 
@@ -119,7 +120,7 @@ plot(dr_plot, density_plot, layout = (1,2), size = (800,300), margins = 4mm)
 The `Measures` package is used here, to define the margins between the individual plots.
 
 !!! info "Plot objects"
-	[`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) uses [`Plots.jl`](https://docs.juliaplots.org/stable/) in the background to generate the plots. All methods and options of [`Plots.jl`](https://docs.juliaplots.org/stable/) are immediately available; it is not necessary to import [`Plots.jl`](https://docs.juliaplots.org/stable/) with `using Plots`. The returned plots `dr_plot` and `density_plot` are full plot objects, that can be saved directly with `savefig(dr_plot,"file_name")`. [`Plots.jl`](https://docs.juliaplots.org/stable/) also allows to re-draw plot objects, allowing to compose images (see [Partial plotting and the combination of plots](@ref partial_plotting)).
+	[`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl) uses [`Plots.jl`](https://docs.juliaplots.org/stable/) in the background to generate the plots. All methods and options of [`Plots.jl`](https://docs.juliaplots.org/stable/) are immediately available; it is not necessary to import [`Plots.jl`](https://docs.juliaplots.org/stable/) with `using Plots`. The returned plots `dr_plot` and `density_plot` are full plot objects, that can be saved directly with `savefig(dr_plot,"file_name")`. [`Plots.jl`](https://docs.juliaplots.org/stable/) also allows to re-draw plot objects, allowing to compose images (see [Partial plotting and the combination of plots](@ref partial_plotting)).
 
 
 The second plotting function is [`peak_analysis_plot`](@ref), which visualizes the effect of different peaks on the dose-response curve:

@@ -36,7 +36,7 @@ Data type to store uncertainty estimates for the `weights` of a K_τ `grid`.
 
 Estimate uncertainty by shifting all grid weights uniformly, one bin at a time, while keeping the other bins fixed. Admissible weights (for a given level) are determined by calculating the objective-function value (objective function automatically generated) for the shifted weights.
 
-The bins can be defined as vector of indices, e.g. `[[1,2,3],[4,5,6]]` or `[1,3,5]` which is converted to `[[1],[3],[5]]`. To obtain bin indices from the grid-domain, use [`select_indices`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.select_indices).
+The bins can be defined as vector of indices, e.g. `[[1,2,3],[4,5,6]]` or `[1,3,5]` which is converted to `[[1],[3],[5]]`. To obtain bin indices from the grid-domain, use [`select_indices`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.select_indices).
 
 The following keywords are available:
 

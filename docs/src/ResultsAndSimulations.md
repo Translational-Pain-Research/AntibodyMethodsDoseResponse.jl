@@ -2,9 +2,9 @@
 
 ## Why `OneDimGrid` objects?
 
-The model generator requires a `OneDimGrid` objects from [`AdaptiveDensityApproximation.jl`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/) (see [Models](@ref binding_models)). For this, the actual weights of the grid do not matter. The model generator returns a new parameter array and a corresponding model function. It is possible to set parameter values in this array and to simulate dose-response curves with the corresponding, returned model function.
+The model generator requires a `OneDimGrid` objects from [`AdaptiveDensityApproximation.jl`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/) (see [Models](@ref binding_models)). For this, the actual weights of the grid do not matter. The model generator returns a new parameter array and a corresponding model function. It is possible to set parameter values in this array and to simulate dose-response curves with the corresponding, returned model function.
 
-But [`AdaptiveDensityApproximation.jl`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/) offers additional methods, e.g. the name-giving adaptive approximation of densities or additional density conversion / analysis tools. For this reason, internal methods use `OneDimGrid` objects and construct the model functions from scratch for the calculation of dose-response curves. This is, among others, the reason why most functions (e.g. the convenience functions of [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience)) return or expect those grids. 
+But [`AdaptiveDensityApproximation.jl`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/) offers additional methods, e.g. the name-giving adaptive approximation of densities or additional density conversion / analysis tools. For this reason, internal methods use `OneDimGrid` objects and construct the model functions from scratch for the calculation of dose-response curves. This is, among others, the reason why most functions (e.g. the convenience functions of [`AntibodyMethodsDoseResponseConvenience`](@ref api_convenience)) return or expect those grids. 
 
 
 !!! tip
@@ -34,7 +34,7 @@ approximate_density!(grid, p, volume_normalization = true)
 !!! info "volume_normalization = true"
 	Without `volume_normalization = true` (the default), the density function itself is approximated (e.g. by using the function values at the centers of the respective intervals). The volume normalization approximates the area under the curve by using `function value × interval length`, which in this case corresponds to the number of epitopes with ``K_\tau`` in the respective interval. This is the correct choice for simulations, as the weights of grids are assumed ot be the numbers of epitopes and not the density values.
 
-To inspect the grid, the plotting recipe from [`AdaptiveDensityApproximationRecipes.jl`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/plotting_basics/) can be used (as described in [Models](@ref binding_models)):
+To inspect the grid, the plotting recipe from [`AdaptiveDensityApproximationRecipes.jl`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/plotting_basics/) can be used (as described in [Models](@ref binding_models)):
 
 
 ```@example ResultsAndSimulations
@@ -63,10 +63,10 @@ scatter(simulation_result, xaxis = :log)
 ```
 
 !!! info "DoseResponseResult"
-	[`DoseResponseResult`](@ref) objects are used to construct and store dose-response curves, resulting from grids. This can be either because a grid was used to simulate a ``K_\tau``-density or because the result of a model-fit was stored in a grid. The package [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) provides a plotting recipe for `DoseResponseResult` objects.
+	[`DoseResponseResult`](@ref) objects are used to construct and store dose-response curves, resulting from grids. This can be either because a grid was used to simulate a ``K_\tau``-density or because the result of a model-fit was stored in a grid. The package [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl) provides a plotting recipe for `DoseResponseResult` objects.
 
 !!! tip "filter_zeros"
-	The same `filter_zeros` keyword that is used for [`FittingData`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) plots can also be used for [`DoseResponseResult`](@ref) plots (see [Measurement Data plotting](@ref measurement_data_plotting)).
+	The same `filter_zeros` keyword that is used for [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) plots can also be used for [`DoseResponseResult`](@ref) plots (see [Measurement Data plotting](@ref measurement_data_plotting)).
 
 ## Importing fitting results
 
@@ -77,7 +77,7 @@ parameters = export_weights(grid)
 push!(parameters, 0.2) # Add offset parameter
 ```
 
-We assume now, that the `gird` was used to obtain the model function and that the `parameters` are the result of the model fit. In this case, the `offset` keyword was used. To import the result into the grid, the [`import_weights!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.import_weights!) functions can be used:
+We assume now, that the `gird` was used to obtain the model function and that the `parameters` are the result of the model fit. In this case, the `offset` keyword was used. To import the result into the grid, the [`import_weights!`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.import_weights!) functions can be used:
 
 ```@example ResultsAndSimulations
 import_weights!(grid, parameters[1:end-1])

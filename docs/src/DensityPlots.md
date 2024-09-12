@@ -23,7 +23,7 @@ While the grid-plot can be helpful, it can also be distracting for an assessment
 
 ## The `DensityPlot` recipe
 
-The [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseRecipes.jl) package offers a plotting recipe to plot the density that a `OneDimGrid` approximates (this package is automatically imported by [`AntibodyMethodsDoseResponseConvenience.jl`](@ref api_convenience)):
+The [`AntibodyMethodsDoseResponseRecipes.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseRecipes.jl) package offers a plotting recipe to plot the density that a `OneDimGrid` approximates (this package is automatically imported by [`AntibodyMethodsDoseResponseConvenience.jl`](@ref api_convenience)):
 
 ```@example ResultsAndSimulations
 plot(DensityPlot(grid), xaxis = :log, fill = 0, volume_normalization = :linear, label = ":linear")

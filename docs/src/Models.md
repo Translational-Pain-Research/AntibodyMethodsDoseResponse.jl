@@ -46,7 +46,7 @@ x(a) \approx \sum_{j=1}^m g_j \int_{I_j}(1-e^{-\frac{a}{k}})\ dk\ .
 ```
 Thus, the inference problem is the estimation of the parameters ``g_1,\ldots, g_m``.
 
-The intervals ``I_j`` and the weights ``g_j`` are implemented as one-dimensional grid with [`AdaptiveDensityApproximation.jl`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/).
+The intervals ``I_j`` and the weights ``g_j`` are implemented as one-dimensional grid with [`AdaptiveDensityApproximation.jl`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/).
 
 ```@example Models
 using AntibodyMethodsDoseResponseConvenience #hide
@@ -54,13 +54,13 @@ using AdaptiveDensityApproximation
 grid = create_grid([1,2,3,5])
 ```
 
-The example above created a grid corresponding to the intervals ``\{[1,2],[2,3],[3,5]\}`` with weights ``g_j = 1``.  To view the grid properties, [`AdaptiveDensityApproximationRecipes.jl`](https://github.com/AntibodyPackages/AdaptiveDensityApproximationRecipes.jl) can be used:
+The example above created a grid corresponding to the intervals ``\{[1,2],[2,3],[3,5]\}`` with weights ``g_j = 1``.  To view the grid properties, [`AdaptiveDensityApproximationRecipes.jl`](https://github.com/Translational-Pain-Research/AdaptiveDensityApproximationRecipes.jl) can be used:
 ```@example Models
 using AdaptiveDensityApproximationRecipes, Plots
 plot(grid)
 ```
 
-New weights can be set with [`import_weights!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.import_weights!):
+New weights can be set with [`import_weights!`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.import_weights!):
 ```@example Models
 import_weights!(grid, [1,2,0.5])
 plot(grid)
@@ -101,7 +101,7 @@ model, init_params, centers, volumes = accumulation_model(grid, offset = 10)
 nothing #hide
 ```
 
-`model` is a [`ModelFunctions`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object from [`FittingObjectiveFunctions.jl`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/), containing both the model function and the partial derivatives w.r.t. to the parameters.
+`model` is a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object from [`FittingObjectiveFunctions.jl`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/), containing both the model function and the partial derivatives w.r.t. to the parameters.
 
 `init_params` contains the weights of the grid, and as last element the `offset` if `offset != nothing`:
 
@@ -143,4 +143,4 @@ plot(create_grid(LogRange(1e-8,1e-2,50)), xaxis = :log, xticks = [10.0^-i for i 
 ```
 
 !!! tip "LogRange"
-	Julia provides the `LinRange` function to create equally spaced points in a given range. [`AntibodyMethodsDoseResponse.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponse.jl) adds [`LogRange`](@ref) to create logarithmically spaced points in a given range, following the same general syntax: `LogRange(start, stop, n_points, [base = 10])`.
+	Julia provides the `LinRange` function to create equally spaced points in a given range. [`AntibodyMethodsDoseResponse.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponse.jl) adds [`LogRange`](@ref) to create logarithmically spaced points in a given range, following the same general syntax: `LogRange(start, stop, n_points, [base = 10])`.

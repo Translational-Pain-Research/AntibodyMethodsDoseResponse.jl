@@ -12,7 +12,7 @@ export area_scaled_variation, log_area_scaled_variation
 	area_scaled_variation(center, volume, weight, 
 		neighbor_centers, neighbor_volumes, neighbor_weights)
 
-Block variation function for [`refine!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!). Variation value based on the difference of the weights, scaled with the area (volume) of the corresponding block.
+Block variation function for [`refine!`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!). Variation value based on the difference of the weights, scaled with the area (volume) of the corresponding block.
 
 	mean(@. abs(weight * volume - neighbor_weights * neighbor_volumes))
 """
@@ -24,7 +24,7 @@ end
 	log_area_scaled_variation(center, volume, weight, 
 		neighbor_centers, neighbor_volumes, neighbor_weights)
 
-Block variation function for [`refine!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!). Variation value based on the difference of the weight, scaled with the visible area (in a logarithmic plot) of the corresponding block.
+Block variation function for [`refine!`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!). Variation value based on the difference of the weight, scaled with the visible area (in a logarithmic plot) of the corresponding block.
 
 	log_volume = (log10(center + volume / 2) - log10(center - volume / 2))
 	neighbor_log_volumes = @. (log10(neighbor_centers + neighbor_volumes / 2) - log10(neighbor_centers - neighbor_log_volumes / 2))
@@ -89,9 +89,9 @@ The following keywords (with default values) are available:
 * `offset = nothing`: Offset parameter for the model function. If `nothing`, no offset is used.
 * `objective::Symbol = :lsq`. The objective function for the data-fit. Available are `:lsq`, `:posterior` and `:log_posterior`.
 * `prior_generator::Function = default_prior_generator`: The function that generates the prior. The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> prior(λ)` or `λ-> log_prior(λ)` in case of a `:log_posterior` objective. The `default_prior_generator` generates a uniform prior `λ-> 0` for the log-posterior objective.
-* `distribution_derivatives = nothing`: Array of partial derivatives of the logarithmic distributions for the log-posterior objective. See [`log_posterior_gradient`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.log_posterior_gradient).
-* `prior_gradient_generator = default_prior_gradient_generator`: The function that generates the log-prior gradient (see  [`log_posterior_gradient`](https://antibodypackages.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.log_posterior_gradient)). The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> ∇log_prior(λ)`. The `default_prior_gradient_generator` returns `nothing` which internally corresponds to the uniform prior for the log-posterior objective.
-* `block_variation::Function =` [`log_area_scaled_variation`](@ref) and `selection::Function = maximum` are the refinement options of [`refine!`](https://antibodypackages.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!).
+* `distribution_derivatives = nothing`: Array of partial derivatives of the logarithmic distributions for the log-posterior objective. See [`log_posterior_gradient`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.log_posterior_gradient).
+* `prior_gradient_generator = default_prior_gradient_generator`: The function that generates the log-prior gradient (see  [`log_posterior_gradient`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.log_posterior_gradient)). The function must have the signature `(grid_centers,grid_volumes,offset)` and must return a function `λ-> ∇log_prior(λ)`. The `default_prior_gradient_generator` returns `nothing` which internally corresponds to the uniform prior for the log-posterior objective.
+* `block_variation::Function =` [`log_area_scaled_variation`](@ref) and `selection::Function = maximum` are the refinement options of [`refine!`](https://translational-pain-research.github.io/AdaptiveDensityApproximation-documentation/api/#AdaptiveDensityApproximation.refine!).
 """
 mutable struct AdaptiveOptions
 	name::AbstractString
