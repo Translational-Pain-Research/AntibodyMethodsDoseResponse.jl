@@ -43,12 +43,12 @@ In this documentation, both the terms **density plot** and **histogram** will be
 
 ## Installation
 
-First, add the registry `Translational-Pain-ResearchRegistry`:
+First, add the registry `Translational-Pain-Julia-Registry`:
 
 ```julia
 using Pkg
 Pkg.Registry.add()
-Pkg.Registry.add(RegistrySpec(url = "https://github.com/Translational-Pain-Research/Translational-Pain-ResearchRegistry"))
+Pkg.Registry.add(RegistrySpec(url = "https://github.com/Translational-Pain-Research/Translational-Pain-Julia-Registry"))
 ```
 
 Then, the packages can be installed as usual. E.g. [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl), which installs all necessary dependencies for the analysis of dose-response curves:
