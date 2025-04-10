@@ -44,6 +44,8 @@ nothing #hide
 Before the data can be analyzed (model fitting), it needs to be summarized in a [`FittingCondition`](@ref) object. A [`FittingCondition`](@ref) object contains both the data and the fitting instructions, which can be specified with keywords. The (recommended) default analysis can be obtained by only passing the data, and the `scale` keyword.
 
 ```@example QuickStart
+using AntibodyMethodsDoseResponseConvenience
+
 fitting_condition = FittingCondition(conc, rep_1,rep_2,rep_3, 
 			scale = 500, 
 			path = "path_to_store_results"
