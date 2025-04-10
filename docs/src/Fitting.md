@@ -3,7 +3,7 @@
 The model generators return a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object. The `model` field of a [`ModelFunctions`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.ModelFunctions) object is a pure Julia function, allowing to implement the model fitting from scratch.
 
 ```@example Fitting
-using AntibodyMethodsDoseResponseConvenience
+using AntibodyMethodsDoseResponseConvenience #hide
 model, params = accumulation_model(create_grid([1,2,3]))
 typeof(model.model) <: Function
 ```

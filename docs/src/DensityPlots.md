@@ -3,7 +3,7 @@
 Consider the following density:
 
 ```@example ResultsAndSimulations
-using AntibodyMethodsDoseResponseConvenience
+using AntibodyMethodsDoseResponseConvenience #hide
 using Distributions
 
 p(x) = pdf(Normal(1e-5,3e-6),x)

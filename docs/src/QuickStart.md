@@ -1,6 +1,6 @@
 # [Quick start](@id quick_start)
 
-The most convenient and recommended way to analyze dose-response data is to use [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl). This tutorial will not cover all details (e.g. the internal procedure), but will present a short introduction of the basics. To see all details and available options, please have a look at the [AnitbodyMethodsDoseResponseConvenience API](@ref api_convenience).
+The most convenient and recommended way to analyze dose-response data is to use [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/Translational-Pain-Research/AntibodyMethodsDoseResponseConvenience.jl). This tutorial will not cover all details (e.g. the internal procedure), but will present a short introduction of the basics. To see all details and available options, please use the [AnitbodyMethodsDoseResponseConvenience API](@ref api_convenience).
 
 ## Starting point
 
@@ -18,7 +18,7 @@ scatter!(data.independent, replicates[3].dependent, xaxis = :log, label = "repli
 
 ## Loading Data
 
-Importing general data into Julia is not the scope of the [`AntibodyMethods`](https://github.com/Translational-Pain-Research) packages. For this, use e.g. [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) or [`CSV.jl`](https://csv.juliadata.org/stable/) in conjunction with [`DataFrames.jl`](https://dataframes.juliadata.org/stable/). Nevertheless, as short introduction, assume that the data is stored in a csv file, where the columns are (concentrations, replicate 1, ..., replicate 3). Using [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) the data can be imported as follows:
+Importing general data into Julia is not the scope of the [`AntibodyMethods`](https://github.com/Translational-Pain-Research) packages. For this, use e.g. [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) or [`CSV.jl`](https://csv.juliadata.org/stable/) in conjunction with [`DataFrames.jl`](https://dataframes.juliadata.org/stable/). Nevertheless, as short introduction, assume that the data is stored in a csv file, where the columns are (concentrations, replicate 1, ..., replicate n). Using [`DelimitedFiles.jl`](https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/) the data can be imported as follows:
 
 
 ```julia
@@ -63,7 +63,7 @@ nothing # hide
 	Since curve-fitting can be a time-consuming process, it is recommended to save the results into files. This allows to re-plot the results at a later time, without having to re-run the fitting process. The `path` keyword defines the directory for the result files. If `path=""`, which is the default option, no files are saved.
 
 !!! tip "Different measurement errors"
-	Constructing a [`FittingCondition`](@ref) object by passing the different replicate responses will default to the standard deviation of the data points for the measurement error. If only a single response is used, the replicates field will be empty (`nothing`) and the measurement errors are set to `±1`. Different errors can be used by constructing the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object manually:
+	Constructing a [`FittingCondition`](@ref) object by passing the different replicate responses will default to the standard deviation of the data points for the measurement error. If only a single replicate is used, the replicates field will be empty (`nothing`) and the measurement errors are set to `±1`. Different errors can be used by constructing the [`FittingData`](https://translational-pain-research.github.io/FittingObjectiveFunctions-documentation/API/#FittingObjectiveFunctions.FittingData) object manually:
 	```julia
 	errors = 0.1 .* responses
 	data = FittingData(concentrations,responses, errors)

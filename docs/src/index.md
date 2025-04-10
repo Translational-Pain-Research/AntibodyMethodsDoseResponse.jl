@@ -39,6 +39,7 @@ In this documentation, both the terms **density plot** and **histogram** will be
     + Covers the background and the internals of the packages.
     + Assumes (at some points) to be read in order from top to bottom.
     + The convenience functions (from the quick start guide) use the same data types and methods internally.
+    + The examples assume that the [`AntibodyMethodsDoseResponseConvenience.jl`](https://github.com/AntibodyPackages/AntibodyMethodsDoseResponseConvenience.jl) is loaded  (`using AnitbodyMethodsDoseResponseConvenience`). See [AnitbodyMethodsDoseResponse API](@ref api_base) for the methods implemented in the base package.
     + Intended for developers that need access to the internal methods and that want to take full control over the analysis.
 
 ## Installation
@@ -56,6 +57,12 @@ Then, the packages can be installed as usual. E.g. [`AntibodyMethodsDoseResponse
 ```julia
 using Pkg
 Pkg.add("AntibodyMethodsDoseResponseConvenience")
+```
+
+After the installation, the packages can be used like any other package: 
+
+```julia
+using AntibodyMethodsDoseResponseConvenience
 ```
 
 ## How to cite the package

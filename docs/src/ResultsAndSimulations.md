@@ -16,7 +16,7 @@ But [`AdaptiveDensityApproximation.jl`](https://translational-pain-research.gith
 To simulate a dose-response curve with a binding model, a density ``g(K_\tau)`` needs to be defined. This can be done with any Julia function, e.g. a probability density function:
 
 ```@example ResultsAndSimulations
-using AntibodyMethodsDoseResponseConvenience
+using AntibodyMethodsDoseResponseConvenience #hide
 using Distributions
 
 p(x) = pdf(Normal(1e-5,3e-6),x)
